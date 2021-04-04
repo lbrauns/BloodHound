@@ -1,4 +1,4 @@
-.vsode/*
+.vscode/*
 node_modules/*
 Bloodhound-*
 dist/
