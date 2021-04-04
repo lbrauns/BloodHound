@@ -57,6 +57,7 @@ const IngestFuncMap = {
     azcloudappadmins: NewIngestion.buildAzureCloudApplicationAdmins,
     azapplicationowners: NewIngestion.buildAzureAppOwners,
     azapplicationtosp: NewIngestion.buildAzureAppToSP,
+    fileshares: NewIngestion.buildFileShareJsonNew,
 };
 
 const MenuContainer = () => {
@@ -292,10 +293,10 @@ const MenuContainer = () => {
         setFileQueue((state) => {
             return { ...state, [file.id]: file };
         });
-        console.log(`Processing ${file.name}`);
+        console.debug("Processing " + file.path);
         console.time('IngestTime');
         let tag;
-        if (file.type.startsWith('az')) {
+        if (file.type.startsWith('az') || (file.type.startsWith('fileshares')) ) {
             tag = 'data';
         } else {
             tag = file.type;
@@ -314,6 +315,7 @@ const MenuContainer = () => {
 
         let count = 0;
         let chunk = [];
+        console.debug('Starting Processor via IngestFuncMap for filetype', file.type);
         let processor = IngestFuncMap[file.type];
         try {
             for await (let data of pipeline) {
@@ -374,6 +376,7 @@ const MenuContainer = () => {
         let session = driver.session();
         await session.run(statement, { props: props }).catch((err) => {
             console.log(statement);
+            console.debug(props)
             console.log(err);
         });
         session.close();

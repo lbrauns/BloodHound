@@ -359,6 +359,16 @@
                     "allowCollapse": true
                 }
             ]
+        },
+        {
+            "name": "Find all Fileshares",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (f:Fileshare) RETURN f",
+                    "allowCollapse": false
+                }
+            ]
         }
     ]
 }
