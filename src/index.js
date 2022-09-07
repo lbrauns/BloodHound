@@ -154,7 +154,7 @@ global.appStore = {
                 scale: 1.25,
                 color: '#7F72FD',
             },
-            AZUser: {
+            AzUser: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uf007',
                 scale: 1.25,
@@ -225,6 +225,67 @@ global.appStore = {
                 content: '\uf544',
                 scale: 1.25,
                 color: '#c1d6d6',
+            },
+            //StormSpotter Node Labels
+            AADUser: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf007',
+                scale: 1.25,
+                color: '#34D2EB',
+            },
+            AADGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF0C0',
+                scale: 1.25,
+                color: '#34D2EB',
+            },
+            Subscription: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf084',
+                scale: 1.25,
+                color: '#E6E600',
+            },
+            ResourceGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf1b2',
+                scale: 1.25,
+                color: '#FFE066',
+            },
+            VirtualMachine: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf108',
+                scale: 1.25,
+                color: '#34D2EB',
+            },
+            KeyVault: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf023',
+                scale: 1.25,
+                color: '#E83F6F',
+            },
+            AADApplication: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf2d2',
+                scale: 1.25,
+                color: '#03fc84',
+            },
+            AADServicePrincipal: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf544',
+                scale: 1.25,
+                color: '#c1d6d6',
+            },
+            AADObject: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF128',
+                scale: 1.25,
+                color: '#E6E600',
+            },
+            AADRole: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF0C0',
+                scale: 1.5,
+                color: '#DBE617',
             },
             Base: {
                 font: "'Font Awesome 5 Free'",
