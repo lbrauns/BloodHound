@@ -1,5 +1,7 @@
 [![Build](https://github.com/BloodHoundAD/BloodHound/actions/workflows/build.yml/badge.svg)](https://github.com/BloodHoundAD/BloodHound/actions/workflows/build.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/BloodHoundAD/BloodHound)](https://github.com/BloodHoundAD/BloodHound/releases/latest)
+![GitHub all releases](https://img.shields.io/github/downloads/BloodHoundAD/BloodHound/total)
+
 
 # Getting Started with BloodHound
 
@@ -34,7 +36,7 @@ You can create your own example Active Directory environment using [BadBlood](ht
 
 BloodHound uses graph theory to reveal hidden relationships and
 attack paths in an Active Directory environment.
-Copyright (C) 2016-2019 Andrew Robbins, Rohan Vazarkar, Will Schroeder
+Copyright (C) 2016-2022 Specter Ops Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

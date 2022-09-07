@@ -27,7 +27,7 @@ Install neo4j
 ::
 
   wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
-  echo 'deb https://debian.neo4j.com stable 4.0' > /etc/apt/sources.list.d/neo4j.list
+  echo 'deb https://debian.neo4j.com stable latest' > /etc/apt/sources.list.d/neo4j.list
   sudo apt-get update
 
 2. Install apt-transport-https with apt
@@ -119,8 +119,8 @@ Alternative: Build the BloodHound GUI
 
   npm install
 
-5. Build BloodHound with 'npm run linuxbuild':
+5. Build BloodHound with 'npm run build:linux':
 
 ::
 
-  npm run linuxbuild
+  npm run build:linux

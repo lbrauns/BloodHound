@@ -40,7 +40,7 @@ Alternative: Build the BloodHound GUI
 
 ::
 
-   $ npm install -g electron-packager
+   $ npm install --location=global electron-packager
 
 3. Clone the BloodHound GitHub repo:
 
@@ -53,8 +53,8 @@ Alternative: Build the BloodHound GUI
 ::
 
    $ npm install
-Build BloodHound with `npm run macbuild`:
+Build BloodHound with `npm run build:linux`:
 
 ::
 
-   $ npm run macbuild
+   $ npm run build

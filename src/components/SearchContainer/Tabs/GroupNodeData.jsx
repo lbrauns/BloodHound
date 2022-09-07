@@ -82,7 +82,7 @@ const GroupNodeData = () => {
                                     property='Reachable High Value Targets'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:Group {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r:{}*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
+                                        'MATCH (m:Group {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
                                     }
                                     start={label}
                                 />
@@ -274,7 +274,7 @@ const GroupNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='OUTBOUND CONTROL RIGHTS'>
+                <CollapsibleSection header='OUTBOUND OBJECT CONTROL'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
