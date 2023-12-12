@@ -1,8 +1,12 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `The Virtual Machine contributor role grants almost all abusable privileges against Virtual Machines.`;
-    return { __html: text };
+const General = () => {
+    return (
+        <p>
+            The Virtual Machine contributor role grants almost all abusable
+            privileges against Virtual Machines.
+        </p>
+    );
 };
 
 export default General;

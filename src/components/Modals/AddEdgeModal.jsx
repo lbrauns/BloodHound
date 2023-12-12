@@ -1,20 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-    Modal,
-    FormGroup,
-    FormControl,
     Button,
     ControlLabel,
+    FormControl,
+    FormGroup,
+    Modal,
 } from 'react-bootstrap';
 import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
 import styles from './AddEdgeModal.module.css';
 import SearchRow from '../SearchContainer/SearchRow';
-import { buildSearchQuery, buildSelectQuery } from 'utils';
+import { buildSearchQuery } from 'utils';
 import BaseModal from './BaseModal';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
-import { useContext } from 'react';
 import { AppContext } from '../../AppContext';
 
 const AddEdgeModal = () => {
@@ -82,8 +80,12 @@ const AddEdgeModal = () => {
 
         let data = [];
         for (let record of result.records) {
-            let properties = record._fields[0].properties;
-            properties.type = record._fields[0].labels[1];
+            let node = record.get(0);
+            let properties = node.properties;
+            let fType = node.labels.filter(
+                (w) => w !== 'Base' && w !== 'AZBase'
+            );
+            properties.type = fType.length > 0 ? fType[0] : 'Base';
             data.push(properties);
         }
 
@@ -94,7 +96,7 @@ const AddEdgeModal = () => {
             setTargetSearchResults(data);
             setTargetLoading(false);
         }
-        session.close();
+        await session.close();
     };
 
     const validateAndSubmit = async () => {
@@ -133,7 +135,7 @@ const AddEdgeModal = () => {
             sourceid: source.objectid,
             targetid: target.objectid,
         });
-        session.close();
+        await session.close();
 
         if (results.records.length > 0) {
             errors.edgeErrors = 'Edge already exists';
@@ -152,7 +154,11 @@ const AddEdgeModal = () => {
             edgeValue === 'Owns' ||
             edgeValue === 'WriteDacl' ||
             edgeValue === 'WriteOwner' ||
-            edgeValue === 'ReadLAPSPassword'
+            edgeValue === 'ReadLAPSPassword' ||
+            edgeValue === 'WriteSPN' ||
+            edgeValue === 'AddKeyCredentialLink' ||
+            edgeValue === 'AddSelf' ||
+            edgeValue === 'SyncLAPSPassword'
         ) {
             edgepart = `[r:${edgeValue} {isacl: true}]`;
         } else if (edgeValue === 'SQLAdmin') {
@@ -164,11 +170,11 @@ const AddEdgeModal = () => {
         session = driver.session();
         statement = `MATCH (n:${source.type} {objectid: $sourceid}) MATCH (m:${target.type} {objectid: $targetid}) MERGE (n)-${edgepart}->(m) RETURN r`;
 
-        results = await session.run(statement, {
+        await session.run(statement, {
             sourceid: source.objectid,
             targetid: target.objectid,
         });
-        session.close();
+        await session.close();
         setShowComplete(true);
         setTimeout(() => {
             handleClose();
@@ -292,7 +298,7 @@ const AddEdgeModal = () => {
                                 ReadLAPSPassword
                             </option>
                             <option value='Contains'>Contains</option>
-                            <option value='GpLink'>GpLink</option>
+                            <option value='GPLink'>GPLink</option>
                             <option value='CanRDP'>CanRDP</option>
                             <option value='CanPSRemote'>CanPSRemote</option>
                             <option value='ExecuteDCOM'>ExecuteDCOM</option>
@@ -303,8 +309,22 @@ const AddEdgeModal = () => {
                                 AddAllowedToAct
                             </option>
                             <option value='AllowedToAct'>AllowedToAct</option>
+                            <option value='AddKeyCredentialLink'>
+                                AddKeyCredentialLink
+                            </option>
+                            <option value='WriteSPN'>WriteSPN</option>
+                            <option value='AddSelf'>AddSelf</option>
                             <option value='SQLAdmin'>SQLAdmin</option>
                             <option value='HasSIDHistory'>HasSIDHistory</option>
+                            <option value='SyncLAPSPassword'>
+                                SyncLAPSPassword
+                            </option>
+                            <option value='WriteAccountRestrictions'>
+                                WriteAccountRestrictions
+                            </option>
+                            <option value='DumpSMSAPassword'>
+                                DumpSMSAPassword
+                            </option>
                         </FormControl>
                         {errors.edgeErrors.length > 0 && (
                             <span className={styles.error}>
@@ -317,7 +337,6 @@ const AddEdgeModal = () => {
                         <AsyncTypeahead
                             id={'addEdgeTargetSearch'}
                             isLoading={targetLoading}
-                            onSearch={() => {}}
                             placeholder={'Target Node'}
                             delay={500}
                             renderMenu={(results, menuProps, props) => {

@@ -1,8 +1,7 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `The ability to read keys from key vaults`;
-    return { __html: text };
+const General = () => {
+    return <p>The ability to read keys from key vaults</p>;
 };
 
 export default General;

@@ -1,3 +1,10 @@
+.. note::
+   This documentation applies to Legacy BloodHound and is no longer maintained.
+
+   See up-to-date documentation for BloodHound CE here: `SharpHound CE`_
+
+.. _SharpHound CE: https://support.bloodhoundenterprise.io/hc/en-us/articles/17481151861019
+
 SharpHound
 ==========
 
@@ -9,7 +16,7 @@ Download the pre-compiled SharpHound binary and PS1 version at
 https://github.com/BloodHoundAD/BloodHound/tree/master/Collectors
 
 You can view the source code for SharpHound and build it from source
-by visiting the SharpHound repo at https://github.com/BloodHoundAD/SharpHound3
+by visiting the SharpHound repo at https://github.com/BloodHoundAD/SharpHound
 
 Basic Usage
 ^^^^^^^^^^^
@@ -78,7 +85,7 @@ SharpHound's Session Loop collection method makes this very easy:
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod Session --Loop
+   C:\> SharpHound.exe --CollectionMethods Session --Loop
 
 This will run SharpHound's session collection method for 2 hours, generating
 a zip file after each loop ends. When done, collect all the zip files and
@@ -91,7 +98,7 @@ to perform looped session collection for 3 hours, 9 minutes and 41 seconds:
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod Session --Loop --Loopduration 03:09:41
+   C:\> SharpHound.exe --CollectionMethods Session --Loop --Loopduration 03:09:41
 
 Running SharpHound from a Non Domain-Joined System
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -166,7 +173,7 @@ AV signatures.
 
 If you are on the blue team side, you can use the same AV bypass techniques used by
 the red team, or you can request an exception for the SharpHound binary itself or
-possibly a folder that you run SharpHound out of. Be aware though that whitelisted
+possibly a folder that you run SharpHound out of. Be aware though that AV excluded
 folders and files can commonly be enumerated by low-privilege users running on the
 same system, so try to be as specific as possible with your white-list exceptions.
 

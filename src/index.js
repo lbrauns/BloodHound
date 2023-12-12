@@ -1,26 +1,28 @@
-import '@babel/polyfill'; // generators
+import 'core-js/stable';
+import 'regenerator-runtime/runtime'; // generators
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import AppContainer from './AppContainer';
 import Login from './components/Float/Login';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 
 import { remote, shell } from 'electron';
-const { app } = remote;
 import { join } from 'path';
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 import ConfigStore from 'electron-store';
 
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { EventEmitter2 as e } from 'eventemitter2';
+
+const { app } = remote;
 
 global.conf = new ConfigStore();
 global.imageconf = new ConfigStore({
     name: 'images',
 });
-import { EventEmitter2 as e } from 'eventemitter2';
 global.emitter = new e({});
 emitter.setMaxListeners(0);
 global.renderEmit = new e({});
@@ -33,22 +35,21 @@ $(document).on('click', 'a[href^="http"]', function (event) {
 });
 
 String.prototype.format = function () {
-    var i = 0,
-        args = arguments;
+    let i = 0;
+    const args = arguments;
     return this.replace(/{}/g, function () {
         return typeof args[i] !== 'undefined' ? args[i++] : '';
     });
 };
 
 String.prototype.formatAll = function () {
-    var args = arguments;
-    return this.replace(/{}/g, args[0]);
+    return this.replace(/{}/g, arguments[0]);
 };
 
 String.prototype.formatn = function () {
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+    let formatted = this;
+    for (let i = 0; i < arguments.length; i++) {
+        const regexp = new RegExp('\\{' + i + '\\}', 'gi');
         formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;
@@ -61,18 +62,17 @@ String.prototype.toTitleCase = function () {
 };
 
 Array.prototype.allEdgesSameType = function () {
-    for (var i = 1; i < this.length; i++) {
+    for (let i = 1; i < this.length; i++) {
         if (this[i].neo4j_type !== this[0].neo4j_type) return false;
     }
 
     return true;
 };
 
-Array.prototype.chunk = function () {
-    let i = 0;
+Array.prototype.chunk = function (chunkSize = 10000) {
+    let i;
     let len = this.length;
     let temp = [];
-    let chunkSize = 10000;
 
     for (i = 0; i < len; i += chunkSize) {
         temp.push(this.slice(i, i + chunkSize));
@@ -142,6 +142,12 @@ global.appStore = {
                 scale: 1.25,
                 color: '#FFAA00',
             },
+            Container: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF466',
+                scale: 1.25,
+                color: '#F79A78',
+            },
             GPO: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uF03A',
@@ -153,6 +159,12 @@ global.appStore = {
                 content: '\uf007',
                 scale: 1.25,
                 color: '#34D2EB',
+            },
+            AZRole: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf2d2',
+                scale: 1.25,
+                color: '#ED8537',
             },
             AZGroup: {
                 font: "'Font Awesome 5 Free'",
@@ -178,6 +190,12 @@ global.appStore = {
                 scale: 1.25,
                 color: '#FFE066',
             },
+            AZManagementGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf1b2',
+                scale: 1.25,
+                color: '#BD93D8',
+            },
             AZVM: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uf108',
@@ -189,6 +207,48 @@ global.appStore = {
                 content: '\uf108',
                 scale: 1.25,
                 color: '#B18FCF',
+            },
+            AZContainerRegistry: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf49e',
+                scale: 1.25,
+                color: '#0885D7',
+            },
+            AZAutomationAccount: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf085',
+                scale: 1.25,
+                color: '#F4BA44',
+            },
+            AZLogicApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf0e8',
+                scale: 1.25,
+                color: '#9EE047',
+            },
+            AZFunctionApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf0e7',
+                scale: 1.25,
+                color: '#F4BA44',
+            },
+            AZWebApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf247',
+                scale: 1.25,
+                color: '#4696E9',
+            },
+            AZManagedCluster: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf1b3',
+                scale: 1.25,
+                color: '#326CE5',
+            },
+            AZVMScaleSet: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf233',
+                scale: 1.25,
+                color: '#007CD0',
             },
             AZKeyVault: {
                 font: "'Font Awesome 5 Free'",
@@ -208,7 +268,7 @@ global.appStore = {
                 scale: 1.25,
                 color: '#c1d6d6',
             },
-            Unknown: {
+            Base: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uF128',
                 scale: 1.25,
@@ -229,7 +289,7 @@ global.appStore = {
             TrustedBy: 'curvedArrow',
             DCSync: 'tapered',
             Contains: 'tapered',
-            GpLink: 'tapered',
+            GPLink: 'tapered',
             Owns: 'tapered',
             CanRDP: 'tapered',
             ExecuteDCOM: 'tapered',
@@ -238,11 +298,16 @@ global.appStore = {
             AddAllowedToAct: 'tapered',
             AllowedToAct: 'tapered',
             GetChanges: 'tapered',
-            GetChangeAll: 'tapered',
+            GetChangesAll: 'tapered',
             SQLAdmin: 'tapered',
             ReadGMSAPassword: 'tapered',
             HasSIDHistory: 'tapered',
             CanPSRemote: 'tapered',
+            AddSelf: 'tapered',
+            WriteSPN: 'tapered',
+            AddKeyCredentialLink: 'tapered',
+            SyncLAPSPassword: 'tapered',
+            DumpSMSAPassword: 'tapered',
         },
     },
     lowResPalette: {
@@ -253,7 +318,7 @@ global.appStore = {
             Domain: '#17E6B9',
             OU: '#FFAA00',
             GPO: '#7F72FD',
-            Unknown: '#E6E600',
+            Base: '#E6E600',
         },
         edgeScheme: {
             AdminTo: 'line',
@@ -269,7 +334,7 @@ global.appStore = {
             TrustedBy: 'curvedArrow',
             DCSync: 'line',
             Contains: 'line',
-            GpLink: 'line',
+            GPLink: 'line',
             Owns: 'line',
             CanRDP: 'line',
             ExecuteDCOM: 'line',
@@ -283,6 +348,8 @@ global.appStore = {
             ReadGMSAPassword: 'line',
             HasSIDHistory: 'line',
             CanPSRemote: 'line',
+            SyncLAPSPassword: 'line',
+            DumpSMSAPassword: 'line',
         },
     },
     highResStyle: {
@@ -373,13 +440,26 @@ if (typeof conf.get('edgeincluded') === 'undefined') {
         AllowedToDelegate: true,
         ReadLAPSPassword: true,
         Contains: true,
-        GpLink: true,
+        GPLink: true,
         AddAllowedToAct: true,
         AllowedToAct: true,
+        WriteAccountRestrictions: true,
         SQLAdmin: true,
         ReadGMSAPassword: true,
         HasSIDHistory: true,
         CanPSRemote: true,
+        SyncLAPSPassword: true,
+        DumpSMSAPassword: true,
+        AZMGGrantRole: true,
+        AZMGAddSecret: true,
+        AZMGAddOwner: true,
+        AZMGAddMember: true,
+        AZMGGrantAppRoles: true,
+        AZNodeResourceGroup: true,
+        AZWebsiteContributor: true,
+        AZLogicAppContributo: true,
+        AZAutomationContributor: true,
+        AZAKSContributor: true,
     });
 }
 
@@ -390,7 +470,7 @@ const alertOptions = {
     transitions: transitions.FADE,
     containerStyle: {
         zIndex: 100,
-        width: '25%',
+        width: '100%',
     },
 };
 
@@ -407,7 +487,7 @@ if (typeof appStore.performance.darkMode === 'undefined') {
     conf.set('performance', appStore.performance);
 }
 
-var custompath = join(app.getPath('userData'), 'customqueries.json');
+const custompath = join(app.getPath('userData'), 'customqueries.json');
 if (!existsSync(custompath)) {
     writeFileSync(custompath, '{"queries": []}');
 }

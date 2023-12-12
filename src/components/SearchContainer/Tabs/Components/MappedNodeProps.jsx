@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, {useContext, useEffect, useState} from 'react';
 import CollapsibleSection from './CollapsibleSection';
 import styles from '../NodeData.module.css';
-import { Table } from 'react-bootstrap';
-import clsx from 'clsx';
-import { useContext } from 'react';
-import { AppContext } from '../../../../AppContext';
+import {Table} from 'react-bootstrap';
+import {AppContext} from '../../../../AppContext';
 
 const MappedNodeProps = ({ label, properties, displayMap }) => {
     const [elements, setElements] = useState({});
@@ -45,7 +42,7 @@ const MappedNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'number') {
             temp.push(
-                <td align='left' key={`${propName}a`}>
+                <td align='left' className={'col-md-2'} key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -58,7 +55,7 @@ const MappedNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'boolean') {
             temp.push(
-                <td align='left' key={`${propName}a`}>
+                <td align='left' className={'col-md-2'} key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -71,7 +68,7 @@ const MappedNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'string') {
             temp.push(
-                <td align='left' key={`${propName}a`}>
+                <td align='left' className={'col-md-2'} key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -84,7 +81,7 @@ const MappedNodeProps = ({ label, properties, displayMap }) => {
         }
         if (Array.isArray(property) && property.length > 0) {
             temp.push(
-                <td align='left' key={`${propName}k`}>
+                <td align='left' className={'col-md-2'} key={`${propName}k`}>
                     {displayProp}
                 </td>
             );
@@ -111,11 +108,10 @@ const MappedNodeProps = ({ label, properties, displayMap }) => {
         setElements(temp);
     }, [label]);
 
-    return elements.length == 0 ? null : (
+    return elements.length === 0 ? null : (
         <CollapsibleSection header={'NODE PROPERTIES'}>
             <div className={styles.itemlist}>
                 <Table>
-                    <thead></thead>
                     <tbody>
                         {Object.keys(elements).map((key) => {
                             return <tr key={key}>{elements[key]}</tr>;

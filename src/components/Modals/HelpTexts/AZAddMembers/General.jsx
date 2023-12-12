@@ -1,8 +1,9 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `The ability to add other principals to an Azure security group`;
-    return { __html: text };
+const General = () => {
+    return (
+        <p>The ability to add other principals to an Azure security group</p>
+    );
 };
 
 export default General;

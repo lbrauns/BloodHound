@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { AppContext } from '../../../AppContext';
+import React, {useContext} from 'react';
+import {AppContext} from '../../../AppContext';
 import styles from './EdgeFilter.module.css';
 
 const EdgeFilterCheck = ({ name }) => {
@@ -13,13 +11,14 @@ const EdgeFilterCheck = ({ name }) => {
 
     return (
         <div className={styles.input}>
-            <input
-                className='checkbox-inline'
-                type='checkbox'
-                checked={context.edgeIncluded[name]}
-                onChange={handleChange}
-            />
-            <label onClick={handleChange}>{name}</label>
+            <label>
+                <input
+                    className='checkbox-inline'
+                    type='checkbox'
+                    checked={context.edgeIncluded[name]}
+                    onChange={handleChange}
+                />
+            {name}</label>
         </div>
     );
 };

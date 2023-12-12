@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import NodeALink from './NodeALink';
 import './NodeCypherLink.module.css';
 
 const NodeCypherLink = ({
@@ -58,7 +57,6 @@ const NodeCypherLink = ({
 
     return (
         <tr
-            style={{ cursor: 'pointer' }}
             onClick={() => {
                 emitter.emit(
                     'query',
@@ -70,7 +68,7 @@ const NodeCypherLink = ({
             }}
         >
             <td align='left'>{property}</td>
-            <td align='right'>{value}</td>
+            <td style={{cursor: "pointer"}} align='right'>{value}</td>
         </tr>
     );
 };

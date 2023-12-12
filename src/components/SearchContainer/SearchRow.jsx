@@ -10,8 +10,19 @@ const SearchRow = ({ item, search }) => {
     } else {
         searched = search;
     }
+
     let type = item.type;
     let icon = {};
+
+    const selectName = () => {
+        if (item.hasOwnProperty("name")){
+            return item["name"];
+        }else if (item.hasOwnProperty("azname")){
+            return item["azname"];
+        }else{
+            return item["objectid"]
+        }
+    }
 
     switch (type) {
         case 'Group':
@@ -32,6 +43,9 @@ const SearchRow = ({ item, search }) => {
         case 'OU':
             icon.className = 'fa fa-sitemap';
             break;
+        case 'Container':
+            icon.className = 'fa fa-box'
+            break
         case 'AZUser':
             icon.className = 'fa fa-user';
             break;
@@ -47,11 +61,35 @@ const SearchRow = ({ item, search }) => {
         case 'AZResourceGroup':
             icon.className = 'fa fa-cube';
             break;
+        case 'AZManagementGroup':
+            icon.className = 'fa fa-cube';
+            break;
         case 'AZVM':
             icon.className = 'fa fa-desktop';
             break;
         case 'AZDevice':
             icon.className = 'fa fa-desktop';
+            break;
+        case 'AZContainerRegistry':
+            icon.className = 'fa fa-box-open';
+            break;
+        case 'AZAutomationAccount':
+            icon.className = 'fa fa-cogs';
+            break;
+        case 'AZLogicApp':
+            icon.className = 'fa fa-sitemap';
+            break;
+        case 'AZFunctionApp':
+            icon.className = 'fa fa-bolt-lightning';
+            break;
+        case 'AZWebApp':
+            icon.className = 'fa fa-object-group';
+            break;
+        case 'AZManagedCluster':
+            icon.className = 'fa fa-cubes';
+            break;
+        case 'AZVMScaleSet':
+            icon.className = 'fa fa-server';
             break;
         case 'AZKeyVault':
             icon.className = 'fa fa-lock';
@@ -62,9 +100,12 @@ const SearchRow = ({ item, search }) => {
         case 'AZServicePrincipal':
             icon.className = 'fa fa-robot';
             break;
+        case 'AZRole':
+            icon.className = 'fa fa-window-restore'
+            break
         default:
             icon.className = 'fa fa-question';
-            type = 'Unknown';
+            type = 'Base';
             break;
     }
 
@@ -79,7 +120,7 @@ const SearchRow = ({ item, search }) => {
                 <i {...icon} />
             </span>
             <Highlighter matchElement='strong' search={searched}>
-                {name}
+                {selectName()}
             </Highlighter>
         </>
     );

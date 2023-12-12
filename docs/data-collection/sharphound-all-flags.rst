@@ -1,3 +1,10 @@
+.. note::
+   This documentation applies to Legacy BloodHound and is no longer maintained.
+
+   See up-to-date documentation for BloodHound CE here: `All SharpHound Community Edition Flags, Explained`_
+
+.. _All SharpHound Community Edition Flags, Explained: https://support.bloodhoundenterprise.io/hc/en-us/articles/17481375424795
+
 All SharpHound Flags, Explained
 ===============================
 
@@ -7,13 +14,13 @@ performance, output, and other behaviors.
 Enumeration Options
 ^^^^^^^^^^^^^^^^^^^
 
-CollectionMethod
+CollectionMethods
 ----------------
 
 This tells SharpHound what kind of data you want to collect. These are the most
 common options you'll likely use:
 
-* **Default:** You can specify default collection, or don't use the CollectionMethod
+* **Default:** You can specify default collection, or don't use the CollectionMethods
   option and this is what SharpHound will do. Default collection includes Active
   Directory security group membership, domain trusts, abusable permissions on AD
   objects, OU tree structure, Group Policy links, the most relevant AD object
@@ -56,6 +63,17 @@ Here are the less common CollectionMethods and what they do:
 * **ObjectProps** - Performs Object Properties collection for properties 
   such as LastLogon or PwdLastSet
 
+Table to demonstrate the differences
+------------------------------------
+
+.. image:: /images/SharpHoundCheatSheet.png   
+   :align: center
+   :width: 900px
+   :alt: SharpHound Cheat Sheet
+
+Image credit: https://twitter.com/SadProcessor
+
+
 Domain
 ------
 
@@ -76,7 +94,7 @@ touch systems that are the most likely to have user session data:
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod Session --Stealth
+   C:\> SharpHound.exe --CollectionMethods Session --Stealth
 
 ComputerFile
 ------------
@@ -107,10 +125,15 @@ OU, do this:
 ExcludeDomainControllers
 ------------------------
 
-This will instruct SharpHound to not touch domain controllers. By not touching
+`--ExcludeDCs` will instruct SharpHound to not touch domain controllers. By not touching
 domain controllers, you will not be able to collect anything specified in the
 `DCOnly` collection method, but you will also likely avoid detection by Microsoft
 ATA.
+
+::
+
+   C:\> SharpHound.exe -d contoso.local --ExcludeDCs
+   
 
 RealDNSName
 -----------
@@ -209,7 +232,7 @@ attempt to collect local group memberships across all systems in a loop:
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod LocalGroup --Loop
+   C:\> SharpHound.exe --CollectionMethods LocalGroup --Loop
 
 LoopDuration
 ------------
@@ -220,7 +243,7 @@ you like using the HH:MM:SS format. For example, to loop session collection for
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod Session --Loop --LoopDuration 12:30:12
+   C:\> SharpHound.exe --CollectionMethods Session --Loop --LoopDuration 12:30:12
 
 LoopInterval
 ------------
@@ -231,7 +254,7 @@ minute interval between loops:
 
 ::
 
-   C:\> SharpHound.exe --CollectionMethod Session --Loop --Loopduration 12:30:12 --LoopInterval 00:15:00
+   C:\> SharpHound.exe --CollectionMethods Session --Loop --Loopduration 12:30:12 --LoopInterval 00:15:00
 
 Connection Options
 ^^^^^^^^^^^^^^^^^^

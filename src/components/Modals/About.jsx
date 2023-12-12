@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import clsx from 'clsx';
 const { app, shell } = require('electron').remote;
 import { join } from 'path';
 import { promises } from 'fs';
@@ -98,25 +97,7 @@ const About = () => {
                             openLink('https://www.twitter.com/_wald0');
                         }}
                     >
-                        @_wald0
-                    </a>
-                    ,{' '}
-                    <a
-                        href='#'
-                        onClick={() => {
-                            openLink('https://www.twitter.com/cptjesus');
-                        }}
-                    >
-                        @CptJesus
-                    </a>
-                    ,{' '}
-                    <a
-                        href='#'
-                        onClick={() => {
-                            openLink('https://twitter.com/Haus3c');
-                        }}
-                    >
-                        @Haus3c
+                        The BloodHound Enterprise Team
                     </a>
                 </h5>
                 <h5>

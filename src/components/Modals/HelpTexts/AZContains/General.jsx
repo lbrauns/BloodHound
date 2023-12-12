@@ -1,8 +1,13 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `This indicates that the parent object contains the child object, such as a resource group containing a virtual machine, or a tenant “containing” a subscription.`;
-    return { __html: text };
+const General = () => {
+    return (
+        <p>
+            This indicates that the parent object contains the child object,
+            such as a resource group containing a virtual machine, or a tenant
+            "containing" a subscription.
+        </p>
+    );
 };
 
 export default General;

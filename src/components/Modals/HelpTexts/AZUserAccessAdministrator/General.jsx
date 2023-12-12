@@ -1,8 +1,11 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `The User Access Admin role can edit roles against many other objects`;
-    return { __html: text };
+const General = () => {
+    return (
+        <p>
+            The User Access Admin role can edit roles against many other objects
+        </p>
+    );
 };
 
 export default General;

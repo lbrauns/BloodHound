@@ -1,3 +1,10 @@
+.. note::
+   This documentation applies to Legacy BloodHound and is no longer maintained.
+
+   See up-to-date documentation for BloodHound CE here: `About BloodHound Nodes`_
+
+.. _About BloodHound Nodes: https://support.bloodhoundenterprise.io/hc/en-us/articles/17605671475867
+
 Nodes
 =====
 
@@ -92,7 +99,7 @@ include:
   password.
 * **unconstraineddelegation**: Whether the user is allowed to perform
   unconstrained kerberos delegation. See more info about that here:
-  https://www.harmj0y.net/blog/redteaming/another-word-on-delegation/
+  https://blog.harmj0y.net/redteaming/another-word-on-delegation/
 
 Group Membership
 ----------------
@@ -251,7 +258,7 @@ Local Admin Rights
 * **Derivative Local Admin Rights**: This query does not run by default because
   it’s a very expensive query for neo4j to run. If you press the play button here,
   neo4j will run the query and return the number of computers this group has
-  “derivative” local admin rights on. For more info about this concept, see
+  "derivative" local admin rights on. For more info about this concept, see
   http://www.sixdub.net/?p=591
 
 Execution Privileges
@@ -326,9 +333,9 @@ Node Properties
 * **Allows Unconstrained Delegation**: Whether the computer is trusted to perform
   unconstrained delegation. By default, all domain controllers are trusted for this
   style of kerberos delegation. For information about the abuse related to this
-  configuration, see https://www.harmj0y.net/blog/redteaming/another-word-on-delegation/
+  configuration, see https://blog.harmj0y.net/redteaming/another-word-on-delegation/
 * **Compromised**: Whether the computer is marked as Owned. You can mark any computer in
-  the BloodHound GUI as Owned by right-clicking it and clicking “Mark Computer as Owned”.
+  the BloodHound GUI as Owned by right-clicking it and clicking "Mark Computer as Owned".
 * **LAPS Enabled**: Whether LAPS is running on the computer. This is determined by
   checking whether the associated MS LAPS properties are populated on the computer
   object
@@ -399,7 +406,7 @@ Local Admin Rights
   deep those group nestings may go
 * **Derivative Local Admin Rights**: This query does not run by default because it’s a very
   expensive query for neo4j to run. If you press the play button here, neo4j will run the
-  query and return the number of computers this computer has “derivative” local admin rights
+  query and return the number of computers this computer has "derivative" local admin rights
   on. For more info about this concept, see http://www.sixdub.net/?p=591
 
 Outbound Execution Privileges
@@ -611,21 +618,21 @@ Descendant Objects
   this OU belongs to
 
 AZTenant
-^^^^^^^
+^^^^^^^^^
 At the top of the node info tab you will see the following info:
 
 * **TENANT NAME**: The name of the tenant in Azure.
 
 Node Properties
---------------
+----------------
 * **Object ID**: The tenant ID for the tenant.
 
 Extra Properties
---------------
+----------------
 * **Object ID**: The tenant ID for the tenant.
 
 Descendant Objects
---------------
+------------------
 * **Subscriptions**: The subscriptions that fall under the tenant
 * **Total VM Objects**: The virtual machine resources in Azure resources
 * **Total Resource Group Objects**: The resource groups contained within the subscriptions under the tenant
@@ -720,7 +727,7 @@ Node Properties
 * **Object ID**: The group’s objectID in AzureAD
 
 Extra Properties
----------------
+-----------------
 
 * **Object ID**: The group’s objectID in AzureAD
 
@@ -734,7 +741,7 @@ Group Members
 * **On-Prem Members**: The number of users that contain an on-premise SID that are members of the group.
 
 Group Membership
-----------------
+-------------------
 
 * **First Degree Group Membership**: The number of groups this group has been
   added to
@@ -742,7 +749,7 @@ Group Membership
   nested group memberships
 
 Outbound Object Control
------------------------
+--------------------------
 
 * **First Degree Object Control**: In AzureAD, the number of objects where this group has direct control of. 
 * **Group Delegated Object Control**: The number of objects where this
@@ -751,7 +758,7 @@ Outbound Object Control
 * **Transitive Object Control**: The number of objects this group can gain control through an object-control abuse attack path.
 
 Inbound Object Control
-----------------------
+-------------------------
 
 * **Explicit Object Controllers**: In AzureAD, the number of principals that have direct control of this group. 
 * **Unrolled Object Controllers**: The *actual* number of principals that have
@@ -778,30 +785,30 @@ At the top of the node info tab you will see the following info:
 * **See Subscription Under Tenant**: See where the subscription lives relative to the tenant it trusts.
 
 Node Properties
----------------
+------------------
 
 * **Object ID**: The Azure objectid for the resource group.
 
 Descendent Objects
-----------------
+-------------------
 
 * **Total VM Objects**: The VMs in Azure that belong to the subscription
 * **Total Resource Group Objects**: The resource groups that belong to the subscription
 * **Total Key Vault Objects**: The Key vaults in Azure that belong to the subscription
 
 AZResourceGroup
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 At the top of the node info tab you will see the following info:
 
 * **RESOURCEGROUPNAME**: The full name of the resource group.
 
 Node Properties
----------------
+----------------
 
 * **Object ID**: The Azure objectid for the resource group.
 
 Descendent Objects
-----------------
+-------------------
 
 * **Descendent VMs**: The VMs in Azure that belong to the resource group
 * **Descendent KeyVaults**: The Key vaults in Azure that belong to the resource group
@@ -813,7 +820,7 @@ Inbound Object Control
 * **Transitive Object Controllers**: The number of objects in AzureAD that can achieve control of this object through object-control attack paths.
 
 AZVM
-^^^^
+^^^^^
 
 At the top of the node info tab you will see the following info:
 
@@ -822,25 +829,27 @@ At the top of the node info tab you will see the following info:
 Overview
 ------------
 * **See VM within Tenant**: Unrolls the VM membership within Azure, displaying the VM’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the VM.
+
 
 Node Properties
----------------
+------------------
 
 * **Object ID**: The Azure objectid for the VM.
 
 Extra Properties
-----------------
+-------------------
 
 * **Object ID**: The Azure objectid for the computer.
 
 Inbound Execution Privileges
-----------------------------
+-------------------------------
 
 * **First Degree Execution Rights**: Principals that have the ability to execute commands or directly log onto the machine.
 * **Group Delegated Execution Rights**: Groups that have the ability to execute commands or directly log onto the machine.
 
 Inbound Object Control
-----------------------
+-------------------------
 
 * **Explicit Object Controllers**: The number of principals that are in a role that has the ability to manage or execute code on the machine.
 * **Unrolled Object Controllers**: The actual number of principals that have control of this
@@ -849,7 +858,7 @@ Inbound Object Control
 * **Transitive Object Controllers**: The number of objects in AzureAD that can achieve control of this object through object-control attack paths.
 
 AZDevice
-^^^^^^^
+^^^^^^^^^
 
 At the top of the node info tab you will see the following info:
 
@@ -867,7 +876,7 @@ Inbound Execution Privileges
 * **InTune Admins**: Principals that have the ability to setup InTune scripts to run on the machine.
 
 AZServicePrincipal
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 At the top of the node info tab you will see the following info:
 
@@ -898,3 +907,365 @@ Inbound Object Control
   control of this object through Azure group delegation.
 * **Transitive Object Controllers**: The number of objects in AD that can achieve
   control of this object through object-control attack paths
+
+AZAutomationAccount
+^^^^^
+
+Automation Accounts are one of several services falling under the umbrella of “Azure Automation”. Azure admins can use Automation Accounts to automate a variety of business operations, such as creating and configuring Virtual Machines in Azure.
+
+Automation Accounts offer different process automation services, but at the core of all those services are what are called Runbooks.
+
+Read more about how attackers abuse Automation Accounts in this blog post: https://medium.com/p/82667d17187a 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AZContainerRegistry
+^^^^^
+
+Azure Container Registry (ACR) is Microsoft’s implementation of the Open Container Initiative’s (OCI) Distribution Spec, which itself is based on the original Docker Registry protocol. In plain English: ACR stores and manages container images for you. ACR serves those images, making them available to run locally, on some remote system, or as an Azure Container Instance. You can think of ACR as being somewhat analogous to your very own Docker Registry.
+
+Read more about how attackers abuse Container Registries in this blog post: https://medium.com/p/1f407bfaa465 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AZFunctionApp
+^^^^^
+
+Functions are one of several services falling under the umbrella of “Azure Automation”. Azure admins can create functions using a variety of language (C#, Java, PowerShell, etc.), then run those functions on-demand in Azure. Functions are hosted and grouped together in Azure using Function Apps.
+
+Read more about how attackers abuse Function Apps in this blog post: https://medium.com/p/300065251cbe 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AZLogicApp
+^^^^^
+
+Logic Apps are another Azure service falling under the general umbrella of “Azure Automation”. Admins can use Logic Apps to construct what are called “workflows”. Workflows are comprised of triggers and actions that occur as a result of those triggers.
+
+Read more about how attackers abuse Logic Apps in this blog post: https://medium.com/p/52b29354fc54 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AZManagedCluster
+^^^^^
+
+Azure Kubernetes Service Managed Clusters provide Azure admins an easy way to create and maintain Kubernetes clusters.
+
+Read about how attackers abuse AKS Managed Clusters in this blog post: https://www.netspi.com/blog/technical/cloud-penetration-testing/extract-credentials-from-azure-kubernetes-service/ 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AZVMScaleSet
+^^^^^
+
+Azure Virtual Machine Scale Sets are used by AKS Managed Clusters to spin up and spin down compute nodes. They can also by used by admins to spin up and manage virtual machines outside of the AKS use-case.
+
+Read about how attackers abuse Virtual Machine Scale Sets in this blog post: https://www.netspi.com/blog/technical/cloud-penetration-testing/extract-credentials-from-azure-kubernetes-service/ 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AzWebApp
+^^^^^
+
+Azure App Service is a Platform-as-a-Service product that promises to improve web application deployment, hosting, availability, and security. Web Apps hosted by Azure App Service are organized into Azure App Service Plans, which are Virtual Machines that the Web Apps in that plan all run on.
+
+Read more about how attackers abuse Web Apps in this blog post: https://medium.com/p/c3adefccff95 
+
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **See asset within Tenant**: Unrolls the asset's membership within Azure, displaying the asset’s resource group & subscription.
+* **Managed Identities**: Shows the assigned managed identity service principals for the asset.
+
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+
+Extra Properties
+-------------------
+
+* **tenantid**: The Azure tenant ID for the asset.
+
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AzManagementGroup
+^^^^^
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Overview
+------------
+* **Reachable High Value Targets**: The count of how many high value
+  targets this asset has an attack path to. Click this number to see the shortest attack paths from this asset
+  to those high value targets.
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+* **Tenant ID**: The Azure tenant ID for the asset.
+
+Extra Properties
+----------------
+
+No extra properties.
+
+Descendent Objects
+-------------------
+
+The number of assets under this asset categorized in Azure asset types.
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.
+
+AzRole
+^^^^^
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the role
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the role.
+* **Display Name**: The display name of the role.
+* **Enabled**: Whether the role is enabled or disabled.
+* **Description**: Description of the role.
+* **Template ID**: Template ID of the role.
+* **Tenant ID**: The Azure tenant ID for the role.
+
+Extra Properties
+----------------
+
+* **isbuiltin**: Whether the role is an Azure built-in role or custom.
+
+
+Assignments
+-------------------
+
+* **Active Assignments**: The assets with this role actively assigned.
+
+AZKeyVault
+^^^^^
+
+At the top of the node info tab you will see the following info:
+
+* **NAME**: The full name of the asset
+
+Node Properties
+------------------
+
+* **Object ID**: The Azure objectid for the asset.
+* **Enable RBAC Authorization**: Whether the Key Vault has RBAC authorization enabled or not.
+* **Tenant ID**: The Azure tenant ID for the asset.
+
+Vault Readers
+-------------------
+
+The number of assets that can read keys, certificates, and secrets in the Key Vault.
+
+Inbound Object Control
+-------------------------
+
+* **Explicit Object Controllers**: The number of principals that are in a role that has the ability to control this asset.
+* **Unrolled Object Controllers**: The actual number of principals that have control of this
+  asset through security group delegation. This number can sometimes be wildly higher than
+  the previous number.
+* **Transitive Object Controllers**: The number of assets in Azure that can achieve control of this object through control attack paths.

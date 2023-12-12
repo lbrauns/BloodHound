@@ -1,8 +1,12 @@
-import { groupSpecialFormat, typeFormat } from '../Formatter';
+import React from 'react';
 
-const General = (sourceName, sourceType, targetName, targetType) => {
-    let text = `Object ownership means almost all abuses are possible against the target object.`;
-    return { __html: text };
+const General = () => {
+    return (
+        <p>
+            Object ownership means almost all abuses are possible against the
+            target object.
+        </p>
+    );
 };
 
 export default General;

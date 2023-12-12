@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './DatabaseDataDisplay.module.css';
 import { Table } from 'react-bootstrap';
 import DatabaseDataLabel from './Components/DatabaseDataLabel';
-import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 import clsx from 'clsx';
 import CollapsibleSection from './Components/CollapsibleSection';
@@ -146,13 +144,27 @@ const DatabaseDataDisplay = () => {
                             label={'AZApp'}
                         />
                         <DatabaseDataLabel
+                            query={'MATCH (n:AZAutomationAccount) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZAutomationAccount'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZContainerRegistry) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZContainerRegistry'}
+                        />
+                        <DatabaseDataLabel
                             query={
                                 'MATCH (n:AZDevice) RETURN count(n) AS count'
                             }
                             index={index}
                             label={'AZDevice'}
                         />
-
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZFunctionApp) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZFunctionApp'}
+                        />
                         <DatabaseDataLabel
                             query={'MATCH (n:AZGroup) RETURN count(n) AS count'}
                             index={index}
@@ -166,11 +178,31 @@ const DatabaseDataDisplay = () => {
                             label={'AZKeyVault'}
                         />
                         <DatabaseDataLabel
+                            query={'MATCH (n:AZLogicApp) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZLogicApp'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZManagedCluster) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZManagedCluster'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZManagementGroup) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZManagementGroup'}
+                        />
+                        <DatabaseDataLabel
                             query={
                                 'MATCH (n:AZResourceGroup) RETURN count(n) AS count'
                             }
                             index={index}
                             label={'AZResourceGroup'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZRole) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZRole'}
                         />
                         <DatabaseDataLabel
                             query={
@@ -186,7 +218,6 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'AZSubscription'}
                         />
-
                         <DatabaseDataLabel
                             query={
                                 'MATCH (n:AZTenant) RETURN count(n) AS count'
@@ -204,11 +235,23 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'AZVM'}
                         />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZVMScaleSet) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZVMScaleSet'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:AZWebApp) RETURN count(n) AS count'}
+                            index={index}
+                            label={'AZWebApp'}
+                        />
                     </tbody>
                 </Table>
             </CollapsibleSection>
 
             <hr></hr>
+
+            <div className={clsx('text-center', styles.buttongroup)}>
 
             <CollapsibleSection header='NTFS OBJECTS'>
                 <Table hover striped responsive>

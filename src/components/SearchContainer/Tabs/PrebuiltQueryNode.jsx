@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import './PrebuiltQueries.module.css';
 
 export default class PrebuiltQueryNode extends Component {
     render() {
-        var c;
+        let c;
 
-        c = function() {
+        c = function () {
             if (appStore.prebuiltQuery.length === 0) {
                 appStore.prebuiltQuery = JSON.parse(
                     JSON.stringify(this.props.info.queryList)
@@ -14,12 +15,10 @@ export default class PrebuiltQueryNode extends Component {
         }.bind(this);
 
         return (
-            <div>
-                <a href='#' onClick={c}>
-                    {this.props.info.name}
-                </a>
-                <br />
-            </div>
+            <tr style={{ cursor: 'pointer' }} onClick={c}>
+                <td align='left'>{this.props.info.name}</td>
+                <td align='right' />
+            </tr>
         );
     }
 }
