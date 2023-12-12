@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import PropTypes from 'prop-types';
 import Gallery from 'react-photo-gallery';
 import SelectedImage from './SelectedImage';
 import Carousel, { Modal, ModalGateway } from 'react-images';

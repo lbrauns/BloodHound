@@ -1,12 +1,8 @@
-import React from 'react';
+import { groupSpecialFormat, typeFormat } from '../Formatter';
 
-const General = () => {
-    return (
-        <p>
-            The ability to change another user's password without knowing their
-            current password
-        </p>
-    );
+const General = (sourceName, sourceType, targetName, targetType) => {
+    let text = `The ability to change another user’s password without knowing their current password`;
+    return { __html: text };
 };
 
 export default General;

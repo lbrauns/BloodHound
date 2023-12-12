@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
 import GlyphiconSpan from '../GlyphiconSpan';
 import Icon from '../Icon';
@@ -58,7 +59,7 @@ const SearchContainer = () => {
                 type: node.type,
             };
             closeTooltip();
-            let elem = jQuery(pathfinding.current);
+            var elem = jQuery(pathfinding.current);
             if (!elem.is(':visible')) {
                 setPathfindingOpen(true);
                 elem.slideToggle('fast');
@@ -82,17 +83,8 @@ const SearchContainer = () => {
         session.run(statement, { name: term }).then((result) => {
             let data = [];
             for (let record of result.records) {
-                let node = record.get(0);
-                let properties = node.properties;
-                let labels = node.labels;
-                if (labels.length === 1) {
-                    properties.type = labels[0];
-                } else {
-                    properties.type = labels.filter((x) => {
-                        return x !== 'Base' && x !== 'AZBase';
-                    })[0];
-                }
-
+                let properties = record._fields[0].properties;
+                properties.type = record._fields[0].labels[1];
                 data.push(properties);
             }
 
@@ -135,8 +127,8 @@ const SearchContainer = () => {
             pathSearchSelected
         );
 
-        mainSearchRef.current.blur();
-        pathSearchRef.current.blur();
+        mainSearchRef.current.getInstance().getInput().blur();
+        pathSearchRef.current.getInstance().getInput().blur();
         emitter.emit('query', query, props, startTarget, endTarget);
     };
 
@@ -248,8 +240,8 @@ const SearchContainer = () => {
             return;
         }
 
-        mainSearchRef.current.blur();
-        pathSearchRef.current.blur();
+        mainSearchRef.current.getInstance().getInput().blur();
+        pathSearchRef.current.getInstance().getInput().blur();
 
         if (!pathfindingOpen) {
             if (mainSearchSelected === null) {

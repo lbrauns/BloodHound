@@ -1,6 +1,7 @@
-import React, {useContext, useState} from 'react';
-import {AppContext} from '../../AppContext';
-import {motion} from 'framer-motion';
+import React, { useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { AppContext } from '../../AppContext';
+import { motion } from 'framer-motion';
 
 const MenuButton = ({ glyphicon, click, hoverVal }) => {
     const [hovered, setHovered] = useState(false);

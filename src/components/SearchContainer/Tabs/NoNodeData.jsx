@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 

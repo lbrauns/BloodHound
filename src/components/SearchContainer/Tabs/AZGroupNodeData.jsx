@@ -1,12 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import CollapsibleSection from './Components/CollapsibleSection';
+import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import NodeCypherLink from './Components/NodeCypherLink';
+import NodeCypherNoNumberLink from './Components/NodeCypherNoNumberLink';
 import MappedNodeProps from './Components/MappedNodeProps';
 import ExtraNodeProps from './Components/ExtraNodeProps';
 import NodePlayCypherLink from './Components/NodePlayCypherLink';
+import Notes from './Components/Notes';
+import { withAlert } from 'react-alert';
+import NodeGallery from './Components/NodeGallery';
 import { Table } from 'react-bootstrap';
 import styles from './NodeData.module.css';
+import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 
 const AZGroupNodeData = () => {
@@ -53,12 +60,7 @@ const AZGroupNodeData = () => {
     const displayMap = {
         objectid: 'Object ID',
         description: 'Description',
-        isassignabletorole: 'Is Role Eligible',
-        displayname: 'Display Name',
-        whencreated: 'Creation Time',
-        securityenabled: 'Security Enabled',
-        groupTypes: 'Group Types',
-        membershipRule: 'Membership Rule',
+        admincount: 'Admin Count',
     };
 
     return objectid === null ? (
@@ -82,22 +84,15 @@ const AZGroupNodeData = () => {
                                     property='Sessions'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:AZGroup {objectid: $objectid}),(n),p = ((n)-[r:HasSession*1..]->(u)-[:AZMemberOf*1..]->(m))'
+                                        'MATCH (m:Group {objectid: $objectid}),(n:Computer),p = ((n)-[r:HasSession*1..]->(u)-[:MemberOf*1..]->(m))'
                                     }
                                     start={label}
-                                />
-                                <NodeCypherLink
-                                    baseQuery={
-                                        'MATCH p=(:AZGroup {objectid: $objectid})-[:AZMemberOf|AZHasRole*1..]->(n:AZRole)'
-                                    }
-                                    property={'Azure AD Admin Roles'}
-                                    target={objectid}
                                 />
                                 <NodeCypherLink
                                     property='Reachable High Value Targets'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:AZGroup {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
+                                        'MATCH (m:Group {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
                                     }
                                     start={label}
                                 />
@@ -133,7 +128,7 @@ const AZGroupNodeData = () => {
                                     property='Direct Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[b:AZMemberOf]->(c:AZGroup {objectid: $objectid}) WHERE n:AZUser OR n:AZGroup OR n:AZDevice'
+                                        'MATCH p=(n)-[b:MemberOf]->(c:AZGroup {objectid: $objectid}) WHERE n:AZUser OR n:AZGroup'
                                     }
                                     end={label}
                                 />
@@ -141,7 +136,7 @@ const AZGroupNodeData = () => {
                                     property='Unrolled Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:AZMemberOf*1..]->(g:AZGroup {objectid: $objectid}) WHERE n:AZUser OR n:AZGroup OR n:AZDevice'
+                                        'MATCH p =(n)-[r:MemberOf*1..]->(g:AZGroup {objectid: $objectid}) WHERE n:AZUser OR n:AZGroup'
                                     }
                                     end={label}
                                     distinct
@@ -150,7 +145,7 @@ const AZGroupNodeData = () => {
                                     property='On-Prem Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:MemberOf*1..]->(g:AZGroup {objectid: $objectid}) WHERE n:User OR n:Group OR n:Computer'
+                                        'MATCH p = (n:User)-[r:MemberOf*1..]->(g:AZGroup {objectid: $objectid}) WHERE n:User OR n:Group OR n:Computer'
                                     }
                                     end={label}
                                     distinct
@@ -171,7 +166,7 @@ const AZGroupNodeData = () => {
                                     property='First Degree Group Membership'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(g1:AZGroup {objectid: $objectid})-[r:AZMemberOf]->(n:AZGroup)'
+                                        'MATCH p=(g1:AZGroup {objectid: $objectid})-[r:MemberOf]->(n)'
                                     }
                                     start={label}
                                     distinct
@@ -180,7 +175,7 @@ const AZGroupNodeData = () => {
                                     property='Unrolled Member Of'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g1:AZGroup {objectid: $objectid})-[r:AZMemberOf*1..]->(n:AZGroup)'
+                                        'MATCH p = (g1:AZGroup {objectid: $objectid})-[r:MemberOf*1..]->(n)'
                                     }
                                     start={label}
                                     distinct
@@ -201,7 +196,7 @@ const AZGroupNodeData = () => {
                                     property='First Degree Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g:AZGroup {objectid: $objectid})-[r:AZAddMembers|AZAddOwner|AZAddSecret|AZAppAdmin|AZAvereContributor|AZCloudAppAdmin|AZContributor|AZExecuteCommand|AZGetCertificates|AZGetKeys|AZGetSecrets|AZGlobalAdmin|AZOwns|AZPrivilegedRoleAdmin|AZResetPassword|AZUserAccessAdministrator|AZVMAdminLogin|AZVMContributor]->(n)'
+                                        'MATCH p = (g:AZGroup {objectid: $objectid})-[r:AZResetPassword|AZAddMembers|AZOwnsAZAvereContributor|AZVMContributor|AZContributor]->(n)'
                                     }
                                     start={label}
                                     distinct
@@ -210,7 +205,7 @@ const AZGroupNodeData = () => {
                                     property='Group Delegated Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g1:AZGroup {objectid: $objectid})-[r1:AZMemberOf*1..]->(g2:AZGroup)-[r2:AZAddMembers|AZAddOwner|AZAddSecret|AZAppAdmin|AZAvereContributor|AZCloudAppAdmin|AZContributor|AZExecuteCommand|AZGetCertificates|AZGetKeys|AZGetSecrets|AZGlobalAdmin|AZOwns|AZPrivilegedRoleAdmin|AZResetPassword|AZUserAccessAdministrator|AZVMAdminLogin|AZVMContributor]->(n)'
+                                        'MATCH p = (g1:AZGroup {objectid: $objectid})-[r1:MemberOf*1..]->(g2:Group)-[r2:AZResetPassword|AZAddMembers|AZOwnsAZAvereContributor|AZVMContributor|AZContributor]->(n)'
                                     }
                                     start={label}
                                     distinct
@@ -219,7 +214,7 @@ const AZGroupNodeData = () => {
                                     property='Transitive Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((g:AZGroup {objectid: $objectid})-[r*1..]->(n))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((g:AZGroup {objectid: $objectid})-[r:AZMemberOf|AZResetPassword|AZAddMembers|AZOwnsAZAvereContributor|AZVMContributor|AZContributor*1..]->(n))'
                                     }
                                     start={label}
                                     distinct
@@ -233,14 +228,14 @@ const AZGroupNodeData = () => {
 
                 <CollapsibleSection header='INBOUND OBJECT CONTROL'>
                     <div className={styles.itemlist}>
-                        <Table>
+                        <Table class='table table-hover table-striped table-borderless table-responsive'>
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
                                     property='Explicit Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AZAddMembers|AZMGAddMember|AZMGAddOwner|AZOwns]->(g:AZGroup {objectid: $objectid})'
+                                        'MATCH p = (n)-[r:AZOwns|AZAddMembers]->(g:AZGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                     distinct
@@ -249,7 +244,7 @@ const AZGroupNodeData = () => {
                                     property='Unrolled Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AZMemberOf*1..]->(g1:AZGroup)-[r1:AZAddMembers|AZMGAddMember|AZMGAddOwner|AZOwns]->(g2:AZGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid'
+                                        'MATCH p = (n)-[r:MemberOf*1..]->(g1:Group)-[r1:AZOwns|AZAddMembers]->(g2:AZGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid'
                                     }
                                     end={label}
                                     distinct
@@ -258,7 +253,7 @@ const AZGroupNodeData = () => {
                                     property='Transitive Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((n)-[r*1..]->(g:AZGroup {objectid: $objectid}))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((n)-[r:AZMemberOf|AZOwns|AZAddMembers*1..]->(g:AZGroup {objectid: $objectid}))'
                                     }
                                     end={label}
                                     distinct

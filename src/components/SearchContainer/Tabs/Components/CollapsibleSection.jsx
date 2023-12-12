@@ -1,9 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './CollapsibleSection.module.css';
 import clsx from 'clsx';
-import {Col, Grid, Row} from 'react-bootstrap';
-import {motion} from 'framer-motion';
-import {AppContext} from '../../../../AppContext';
+import { Row, Col, Grid } from 'react-bootstrap';
+import { motion } from 'framer-motion';
+import { useContext } from 'react';
+import { AppContext } from '../../../../AppContext';
 
 const CollapsibleSection = ({ header, children }) => {
     const [open, setOpen] = useState(true);

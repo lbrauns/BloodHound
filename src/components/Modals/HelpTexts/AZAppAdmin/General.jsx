@@ -1,12 +1,8 @@
-import React from 'react';
+import { groupSpecialFormat, typeFormat } from '../Formatter';
 
-const General = () => {
-    rerturn(
-        <p>
-            Principals with the Application Admin role can control
-            tenant-resident apps.
-        </p>
-    );
+const General = (sourceName, sourceType, targetName, targetType) => {
+    let text = `Principals with the Application Admin role can control tenant-resident apps.`;
+    return { __html: text };
 };
 
 export default General;

@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { withAlert } from 'react-alert';
 import NodeEditorRow from './NodeEditorRow.jsx';
 import { Button, Panel, Table } from 'react-bootstrap';
 import styles from './NodeEditor.module.css';
 import PoseContainer from '../PoseContainer';
+import Draggable from 'react-draggable';
 import clsx from 'clsx';
 import { AppContext } from '../../AppContext.jsx';
 import { useDragControls } from 'framer-motion';
@@ -30,7 +32,7 @@ const NodeEditor = () => {
         let statement = `MATCH (n:${node.type} {objectid: $id}) RETURN n`;
 
         session.run(statement, { id: node.objectid }).then((result) => {
-            let props = result.records[0].get(0).properties;
+            let props = result.records[0]._fields[0].properties;
             let label = props.name;
             delete props.name;
             setName(label || props.objectid);
@@ -59,7 +61,7 @@ const NodeEditor = () => {
         let session = driver.session();
         let statement = `MATCH (n:${type} {objectid:  $id}) SET n.${newAttrName}=$newprop RETURN n`;
         session.run(statement, { id: id, newprop: newValue }).then((result) => {
-            let props = result.records[0].get(0).properties;
+            let props = result.records[0]._fields[0].properties;
             let label = props.name;
             delete props.name;
             setName(label || props.objectid);
@@ -86,7 +88,7 @@ const NodeEditor = () => {
 
         let session = driver.session();
         session.run(statement, { id: id, newprop: newValue }).then((result) => {
-            let props = result.records[0].get(0).properties;
+            let props = result.records[0]._fields[0].properties;
             let label = props.name;
             delete props.name;
             setName(label || props.objectid);
@@ -100,7 +102,7 @@ const NodeEditor = () => {
 
         let session = driver.session();
         session.run(statement, { id: id }).then((result) => {
-            let props = result.records[0].get(0).properties;
+            let props = result.records[0]._fields[0].properties;
             let label = props.name;
             delete props.name;
             setName(label || props.objectid);
@@ -150,23 +152,18 @@ const NodeEditor = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Object.keys(properties)
-                                    .map(function (key) {
-                                        if (key === 'lastseen') {
-                                            return null;
-                                        }
-                                        let val = properties[key];
-                                        return (
-                                            <NodeEditorRow
-                                                key={key}
-                                                attributeName={key}
-                                                val={val}
-                                                deleteHandler={deleteAttribute}
-                                                updateHandler={updateAttribute}
-                                            />
-                                        );
-                                    })
-                                    .filter((x) => x !== null)}
+                                {Object.keys(properties).map(function (key) {
+                                    let val = properties[key];
+                                    return (
+                                        <NodeEditorRow
+                                            key={key}
+                                            attributeName={key}
+                                            val={val}
+                                            deleteHandler={deleteAttribute}
+                                            updateHandler={updateAttribute}
+                                        />
+                                    );
+                                })}
                             </tbody>
                         </Table>
                     </div>

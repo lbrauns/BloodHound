@@ -1,11 +1,6 @@
-import React from 'react';
-
 const References = () => {
-    return (
-        <a href='https://blog.netspi.com/attacking-azure-cloud-shell/'>
-            https://blog.netspi.com/attacking-azure-cloud-shell/
-        </a>
-    );
+    let text = `<a href="https://blog.netspi.com/attacking-azure-cloud-shell/ ">https://blog.netspi.com/attacking-azure-cloud-shell/</a>`;
+    return { __html: text };
 };
 
 export default References;

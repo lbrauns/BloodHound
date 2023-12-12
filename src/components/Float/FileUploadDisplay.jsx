@@ -1,10 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './FileUploadDisplay.module.css';
-import { Col, Grid, ProgressBar, Row } from 'react-bootstrap';
+import {
+    Button,
+    Panel,
+    Table,
+    Grid,
+    Row,
+    Col,
+    ProgressBar,
+} from 'react-bootstrap';
 import { motion } from 'framer-motion';
+import { useContext } from 'react';
 import { AppContext } from '../../AppContext';
 import clsx from 'clsx';
-import { FileStatus } from '../Menu/MenuContainer';
+
+const FileStatus = Object.freeze({
+    ParseError: 0,
+    InvalidVersion: 1,
+    BadType: 2,
+    Waiting: 3,
+    Processing: 4,
+    Done: 5,
+    NoData: 6,
+});
 
 const FileUploadDisplay = ({ file }) => {
     const [progress, setProgress] = useState(0);

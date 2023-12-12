@@ -33,7 +33,8 @@
 }
 
 .darkmenu :global li :global a:hover {
-    background: #406f8e none;
+    background: none;
+    background-color: #406f8e;
     color: white;
 }
 

@@ -1,68 +1,59 @@
-.. note::
-   This documentation applies to Legacy BloodHound and is no longer maintained.
-
-   See up-to-date documentation for BloodHound CE here: `Install BloodHound Community Edition with Docker Compose`_
-
-.. _Install BloodHound Community Edition with Docker Compose: https://support.bloodhoundenterprise.io/hc/en-us/articles/17468450058267
-
 Linux
 =====
 
 Install Java
 ^^^^^^^^^^^^
 
-1. Install Open JDK 11:
+1. Update your apt sources with this command:
 
 ::
 
-  sudo apt-get install openjdk-11-jdk
+  echo "deb http://httpredir.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list.d/stretch-backports.list
 
+2. Run apt-get update:
+
+::
+
+  sudo apt-get update
+
+neo4j will now automatically pull from that repo when it needs to install Java as part of its
+install process
 
 Install neo4j
 ^^^^^^^^^^^^^
-
-.. Warning::
-
-  Neo4j 5 suffers from severe performance regression issues. Until further notice, please use latest Neo4j 4.x version
 
 1. Add the neo4j repo to your apt sources:
 
 ::
 
   wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
-  echo 'deb https://debian.neo4j.com stable 4' | sudo tee /etc/apt/sources.list.d/neo4j.list > /dev/null
+  echo 'deb https://debian.neo4j.com stable 4.0' > /etc/apt/sources.list.d/neo4j.list
   sudo apt-get update
 
 2. Install apt-transport-https with apt
 
 ::
 
-  sudo apt-get install apt-transport-https
+  apt-get install apt-transport-https
 
-.. note:: In Ubuntu server installations, you also need to make sure that the universe repository is enabled. If the universe repository is not present, the Neo4j installation will fail with the error Depends: daemon but it is not installable.
-   This can be fixed by running the command:
-
-   sudo add-apt-repository universe
-
-
-3. Install neo4j community edition using apt:
+2. Install neo4j community edition using apt:
 
 ::
 
   sudo apt-get install neo4j
 
-4. Stop neo4j
+3. Stop neo4j
 
 ::
 
-  sudo systemctl stop neo4j
+  systemctl stop neo4j
 
-5. Start neo4j as a console application and verify it starts up without errors:
+4. Start neo4j as a console application and verify it starts up without errors:
 
 ::
 
   cd /usr/bin
-  sudo ./neo4j console
+  ./neo4j console
 
 .. note:: It is very common for people to host neo4j on a Linux system, but use the BloodHound
    GUI on a different system. neo4j by default only allows local connections. To allow remote
@@ -72,7 +63,7 @@ Install neo4j
 
    Remove the # character to uncomment the line. Save the file, then start neo4j up again
 
-6. Start neo4j up again. You have two options:
+5. Start neo4j up again. You have two options:
 
 Run neo4j as a console application:
 
@@ -85,11 +76,11 @@ Or use systemctl to start neo4j:
 
 ::
 
-  sudo systemctl start neo4j
+  systemctl start neo4j
 
-7. Open a web browser and navigate to https://localhost:7474/. You should see the neo4j web console.
+6. Open a web browser and navigate to https://localhost:7474/. You should see the neo4j web console.
 
-8. Authenticate to neo4j in the web console with username neo4j, password neo4j. You’ll be prompted
+7. Authenticate to neo4j in the web console with username neo4j, password neo4j. You’ll be prompted
    to change this password.
 
 Download the BloodHound GUI
@@ -101,7 +92,7 @@ Download the BloodHound GUI
 
 ::
 
-  ./BloodHound --no-sandbox
+  ./BloodHound.bin --no-sandbox
 
 3. Authenticate with the credentials you set up for neo4j
 
@@ -128,8 +119,8 @@ Alternative: Build the BloodHound GUI
 
   npm install
 
-5. Build BloodHound with 'npm run build:linux':
+5. Build BloodHound with 'npm run linuxbuild':
 
 ::
 
-  npm run build:linux
+  npm run linuxbuild

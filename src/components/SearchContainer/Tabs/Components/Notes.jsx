@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './NoteGallery.module.css';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
@@ -56,7 +57,7 @@ const Notes = ({ objectid, type }) => {
                     objectid: objectid,
                 }
             );
-            await session.close();
+            session.close();
         } else {
             await session.run(
                 `MATCH (n:${type} {objectid: $objectid}) SET n.notes=$notes`,
@@ -65,7 +66,7 @@ const Notes = ({ objectid, type }) => {
                     notes: newNotes,
                 }
             );
-            await session.close();
+            session.close();
         }
         setShowCheck(true);
         setTimeout(() => {

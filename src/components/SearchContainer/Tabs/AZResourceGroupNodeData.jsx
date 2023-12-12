@@ -1,11 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import CollapsibleSection from './Components/CollapsibleSection';
+import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import NodeCypherLink from './Components/NodeCypherLink';
+import NodeCypherNoNumberLink from './Components/NodeCypherNoNumberLink';
 import MappedNodeProps from './Components/MappedNodeProps';
+import ExtraNodeProps from './Components/ExtraNodeProps';
 import NodePlayCypherLink from './Components/NodePlayCypherLink';
+import Notes from './Components/Notes';
+import { withAlert } from 'react-alert';
+import NodeGallery from './Components/NodeGallery';
 import { Table } from 'react-bootstrap';
 import styles from './NodeData.module.css';
+import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 
 const AZResourceGroupNodeData = () => {
@@ -51,7 +59,6 @@ const AZResourceGroupNodeData = () => {
 
     const displayMap = {
         objectid: 'Object ID',
-        tenantid: 'Tenant ID',
     };
 
     return objectid === null ? (
@@ -74,81 +81,26 @@ const AZResourceGroupNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='DESCENDANT OBJECTS'>
+                <CollapsibleSection header='Descendent Objects'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Total Automation Account Objects'
+                                    property='Descendent VMs'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZAutomationAccount)'
+                                        'MATCH p = (g:AZResourceGroup {objectid: $objectid})-[r:AZContains]->(n:AZVM)'
                                     }
-                                    distinct
+                                    end={label}
                                 />
                                 <NodeCypherLink
-                                    property='Total Container Registry Objects'
+                                    property='Descendent KeyVaults'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZContainerRegistry)'
+                                        'MATCH p = (g:AZResourceGroup {objectid: $objectid})-[r:AZContains]->(n:AZKeyVault)'
                                     }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total Function App Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZFunctionApp)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total Key Vault Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZKeyVault)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total Logic App Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZLogicApp)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total Managed Cluster Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZManagedCluster)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total VM Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZVM)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total VM Scale Set Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZVMScaleSet)'
-                                    }
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Total Web App Objects'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(o:AZResourceGroup {objectid: $objectid})-[r:AZContains*1..]->(n:AZWebApp)'
-                                    }
+                                    end={label}
                                     distinct
                                 />
                             </tbody>
@@ -158,7 +110,7 @@ const AZResourceGroupNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='INBOUND OBJECT CONTROL'>
+                <CollapsibleSection header='Inbound Object Control'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
@@ -176,7 +128,7 @@ const AZResourceGroupNodeData = () => {
                                     property='Unrolled Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AZMemberOf]->(g1)-[r1:AZOwns|AZUserAccessAdministrator]->(g2:AZResourceGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid'
+                                        'MATCH p = (n)-[r:MemberOf*1..]->(g1:Group)-[r1:AZOwns|AZUserAccessAdministrator]->(g2:AZResourceGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid'
                                     }
                                     end={label}
                                     distinct

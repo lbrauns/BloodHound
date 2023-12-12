@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {ListGroup, Panel} from 'react-bootstrap';
-import {Else, If, Then} from 'react-if';
+import React, { Component } from 'react';
+import { ListGroup, Panel } from 'react-bootstrap';
+import { If, Then, Else } from 'react-if';
 import QueryNodeSelectItem from './QueryNodeSelectItem';
-import {withAlert} from 'react-alert';
+import { withAlert } from 'react-alert';
 
 class QueryNodeSelect extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             data: [],
@@ -22,7 +22,7 @@ class QueryNodeSelect extends Component {
     }
 
     getEventInfo() {
-        let query = appStore.prebuiltQuery.shift();
+        var query = appStore.prebuiltQuery.shift();
         if (query.final) {
             emitter.emit(
                 'query',
@@ -37,9 +37,9 @@ class QueryNodeSelect extends Component {
                 currentQueryTitle: query.title,
             });
             $(this.refs.outer).fadeToggle(true);
-            let session = driver.session();
+            var session = driver.session();
             session.run(query.query, query.props).then((results) => {
-                let y = $.map(results.records, (x) => {
+                var y = $.map(results.records, (x) => {
                     let a = x.keys.map((e, i) => {
                         let obj = {};
                         obj[e.split('.')[1]] = x._fields[i];
@@ -65,7 +65,7 @@ class QueryNodeSelect extends Component {
     }
 
     doQueryStep(querydata) {
-        let query = appStore.prebuiltQuery.shift();
+        var query = appStore.prebuiltQuery.shift();
         if (query.final) {
             let start =
                 typeof query.startNode !== 'undefined'
@@ -89,10 +89,10 @@ class QueryNodeSelect extends Component {
             this.setState({
                 currentQueryTitle: query.title,
             });
-            let session = driver.session();
+            var session = driver.session();
             session.run(query.query, { result: querydata }).then(
                 function (results) {
-                    let y = $.map(results.records, function (x) {
+                    var y = $.map(results.records, function (x) {
                         let a = x.keys.map(function (e, i) {
                             let obj = {};
                             obj[e.split('.')[1]] = x._fields[i];
@@ -147,13 +147,14 @@ class QueryNodeSelect extends Component {
                                 <ListGroup ref='list'>
                                     {this.state.data.map(
                                         function (key) {
-                                            return (
+                                            var x = (
                                                 <QueryNodeSelectItem
                                                     key={key.name}
                                                     label={key.name}
                                                     extraProps={key}
                                                 />
                                             );
+                                            return x;
                                         }.bind(this)
                                     )}
                                 </ListGroup>

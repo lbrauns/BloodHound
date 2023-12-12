@@ -3,7 +3,10 @@
     border-left: solid #151d29 15px;
     border-right: solid #151d29 15px;
     border-top: solid #151d29 15px;
-    margin: 5px 10px 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
     width: 95%;
 }
 
@@ -19,9 +22,9 @@ h4 {
 
 .dark {
     background-color: #151d29;
-    border-top: solid #151d29 0;
-    border-left: solid #151d29 0;
-    border-right: solid #151d29 0;
+    border-top: solid #151d29 0px;
+    border-left: solid #151d29 0px;
+    border-right: solid #151d29 0px;
 }
 
 .dark :global table > tbody > tr:hover > td {
@@ -84,18 +87,20 @@ h4 {
 ::-webkit-scrollbar {
     width: 6px;
 }
-
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px #151d29;
 }
-
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 24px rgba(140, 197, 201);
 }
 
 .btnright {
     background-color: #406f8e;
-    border-radius: 0 25px 25px 0;
+    border-color: #406f8e;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     border: 1px solid transparent;
     padding: 8px;
     font-family: Helvetica;
@@ -105,7 +110,11 @@ h4 {
 
 .btnleft {
     background-color: #23395b;
-    border-radius: 25px 0 0 25px;
+    border-color: #23395b;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
     border: 1px solid transparent;
     padding: 8px;
     font-family: Helvetica;

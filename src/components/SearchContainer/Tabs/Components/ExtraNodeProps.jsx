@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import CollapsibleSection from './CollapsibleSection';
 import styles from '../NodeData.module.css';
 import { Table } from 'react-bootstrap';
@@ -6,7 +7,7 @@ import { Table } from 'react-bootstrap';
 const ExtraNodeProps = ({ label, properties, displayMap }) => {
     const [elements, setElements] = useState([]);
 
-    const blacklist = ['highvalue', 'hasspn', 'primarygroupid', 'name'];
+    const blacklist = ['highvalue', 'hasspn', 'primarygroupid'];
 
     const createValue = (value) => {
         let type = typeof value;
@@ -42,7 +43,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'number') {
             temp.push(
-                <td align='left' className={'col-md-2'} key={`${propName}a`}>
+                <td align='left' key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -55,7 +56,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'boolean') {
             temp.push(
-                <td align='left' className={'col-md-2'} key={`${propName}a`}>
+                <td align='left' key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -68,7 +69,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
         }
         if (type === 'string') {
             temp.push(
-                <td align='left' className={'col-md-2'} key={`${propName}a`}>
+                <td align='left' key={`${propName}a`}>
                     {displayProp}
                 </td>
             );
@@ -81,7 +82,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
         }
         if (Array.isArray(property) && property.length > 0) {
             temp.push(
-                <td align='left' className={'col-md-2'} key={`${propName}k`}>
+                <td align='left' key={`${propName}k`}>
                     {displayProp}
                 </td>
             );
@@ -90,7 +91,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
                 d += `${createValue(val)}\n`;
             });
             temp.push(
-                <td align='right' style={{ whiteSpace: 'pre' }} key={d}>
+                <td align='right' style={{ whiteSpace: 'pre' }}>
                     {d}
                 </td>
             );
@@ -113,7 +114,7 @@ const ExtraNodeProps = ({ label, properties, displayMap }) => {
         setElements(temp);
     }, [label]);
 
-    return elements.length === 0 ? null : (
+    return elements.length == 0 ? null : (
         <CollapsibleSection header={'EXTRA PROPERTIES'}>
             <div className={styles.itemlist}>
                 <Table bordered={false} hover responsive>

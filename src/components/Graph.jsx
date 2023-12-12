@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { findGraphPath, generateUniqueId, setSchema } from 'utils';
-import { readFile, writeFile } from 'fs';
+import { findGraphPath, generateUniqueId, addConstraints } from 'utils';
+import { writeFile, readFile } from 'fs';
 import { fork } from 'child_process';
+var child;
 import { join } from 'path';
 import { remote } from 'electron';
-import { v4 as uuidv4 } from 'uuid';
+const { dialog } = remote;
+const uuidv4 = require('uuid/v4');
+var observer = require('fontfaceobserver');
 import { withAlert } from 'react-alert';
 import NodeTooltip from './Tooltips/NodeTooltip';
 import StageTooltip from './Tooltips/StageTooltip';
 import EdgeTooltip from './Tooltips/EdgeTooltip';
 import ConfirmDrawModal from './Modals/ConfirmDrawModal';
 import { escapeRegExp } from '../js/utils';
-
-let child;
-const { dialog } = remote;
-let Observer = require('fontfaceobserver');
 
 class GraphContainer extends Component {
     constructor(props) {
@@ -67,7 +66,7 @@ class GraphContainer extends Component {
             }.bind(this)
         );
 
-        setSchema();
+        addConstraints();
 
         emitter.on(
             'doLogout',
@@ -112,7 +111,7 @@ class GraphContainer extends Component {
     }
 
     componentDidMount() {
-        const font = new Observer('Font Awesome 5 Free');
+        var font = new observer('Font Awesome 5 Free');
         font.load().then((x) => {
             this.inita();
         });
@@ -263,7 +262,7 @@ class GraphContainer extends Component {
         }
         let session = driver.session();
         await session.run(statement, { name: name, guid: guid });
-        await session.close();
+        session.close();
 
         let instance = this.state.sigmaInstance;
         let id = generateUniqueId(instance, true);
@@ -284,7 +283,7 @@ class GraphContainer extends Component {
         instance.graph.addNode(node);
         closeTooltip();
         this.applyDesign();
-        await session.close();
+        session.close();
     }
 
     relayout() {
@@ -301,7 +300,7 @@ class GraphContainer extends Component {
 
     changeLayout() {
         appStore.dagre = !appStore.dagre;
-        const type = appStore.dagre ? 'Hierarchical' : 'Directed';
+        var type = appStore.dagre ? 'Hierarchical' : 'Directed';
         this.props.alert.success('Changed Layout to {}'.format(type));
         this.relayout();
     }
@@ -502,7 +501,7 @@ class GraphContainer extends Component {
             payload,
             'utf8',
             function (err, data) {
-                let graph;
+                var graph;
                 try {
                     graph = JSON.parse(data);
                 } catch (err) {
@@ -590,8 +589,8 @@ class GraphContainer extends Component {
     }
 
     setGraphicsMode() {
-        const lowgfx = appStore.performance.lowGraphics;
-        const sigmaInstance = this.state.sigmaInstance;
+        var lowgfx = appStore.performance.lowGraphics;
+        var sigmaInstance = this.state.sigmaInstance;
         this.state.design.clear();
         if (lowgfx) {
             sigmaInstance.settings('defaultEdgeType', 'line');
@@ -616,8 +615,8 @@ class GraphContainer extends Component {
     }
 
     zoomOut() {
-        const sigmaInstance = this.state.sigmaInstance;
-        const cam = sigmaInstance.camera;
+        var sigmaInstance = this.state.sigmaInstance;
+        var cam = sigmaInstance.camera;
 
         sigma.misc.animation.camera(
             cam,
@@ -631,8 +630,8 @@ class GraphContainer extends Component {
     }
 
     zoomIn() {
-        const sigmaInstance = this.state.sigmaInstance;
-        const cam = sigmaInstance.camera;
+        var sigmaInstance = this.state.sigmaInstance;
+        var cam = sigmaInstance.camera;
 
         sigma.misc.animation.camera(
             cam,
@@ -675,8 +674,8 @@ class GraphContainer extends Component {
             this.applyDesign();
             this.lockScale();
             appStore.spotlightData = query.spotlight;
-            appStore.startNode = query.startNode;
-            appStore.endNode = query.endNode;
+            (appStore.startNode = query.startNode),
+                (appStore.endNode = query.endNode);
             emitter.emit('spotlightUpdate');
         }
     }
@@ -787,13 +786,13 @@ class GraphContainer extends Component {
                                             edges[edge.id] = edge;
                                         }
 
-                                        if (end !== null) {
+                                        if (end != null) {
                                             if (!nodes[end.id]) {
                                                 nodes[end.id] = end;
                                             }
                                         }
 
-                                        if (start !== null) {
+                                        if (start != null) {
                                             if (!nodes[start.id]) {
                                                 nodes[start.id] = start;
                                             }
@@ -811,20 +810,20 @@ class GraphContainer extends Component {
                                                     'end' in value &&
                                                     !edges.id
                                                 ) {
-                                                    edges[id] =
-                                                        this.createEdgeFromRow(
-                                                            value
-                                                        );
+                                                    edges[
+                                                        id
+                                                    ] = this.createEdgeFromRow(
+                                                        value
+                                                    );
                                                 } else if (
                                                     !nodes.id &&
                                                     !('end' in value)
                                                 ) {
-                                                    let node =
-                                                        this.createNodeFromRow(
-                                                            value,
-                                                            params
-                                                        );
-                                                    if (node !== null) {
+                                                    let node = this.createNodeFromRow(
+                                                        value,
+                                                        params
+                                                    );
+                                                    if (node != null) {
                                                         nodes[id] = node;
                                                     }
                                                 }
@@ -837,8 +836,9 @@ class GraphContainer extends Component {
                                         Object.hasOwnProperty(field, 'end') &&
                                         !edges.id
                                     ) {
-                                        edges[id] =
-                                            this.createEdgeFromRow(field);
+                                        edges[id] = this.createEdgeFromRow(
+                                            field
+                                        );
                                     } else if (
                                         !nodes.id &&
                                         !Object.hasOwnProperty(field, 'end')
@@ -847,7 +847,7 @@ class GraphContainer extends Component {
                                             field,
                                             params
                                         );
-                                        if (node !== null) {
+                                        if (node != null) {
                                             nodes[id] = node;
                                         }
                                     }
@@ -865,7 +865,7 @@ class GraphContainer extends Component {
                 }, 1500);
             },
             onCompleted: function () {
-                const graph = { nodes: [], edges: [] };
+                var graph = { nodes: [], edges: [] };
                 $.each(nodes, function (node) {
                     graph.nodes.push(nodes[node]);
                 });
@@ -885,12 +885,12 @@ class GraphContainer extends Component {
     }
 
     createEdgeFromRow(data) {
-        const id = data.identity;
-        const type = data.type;
-        const source = data.start;
-        const target = data.end;
+        var id = data.identity;
+        var type = data.type;
+        var source = data.start;
+        var target = data.end;
 
-        const edge = {
+        var edge = {
             id: id,
             etype: type,
             source: source,
@@ -919,24 +919,14 @@ class GraphContainer extends Component {
         return edge;
     }
 
-    selectLabel(properties) {
-        if (properties.hasOwnProperty('name')) {
-            return properties['name'];
-        } else if (properties.hasOwnProperty('azname')) {
-            return properties['azname'];
-        } else {
-            return properties['objectid'];
-        }
-    }
-
     createNodeFromRow(data, params) {
         if (!data.hasOwnProperty('identity')) {
             return null;
         }
         let id = data.identity;
-        let fType = data.labels.filter((w) => w !== 'Base' && w !== 'AZBase');
-        let type = fType.length > 0 ? fType[0] : 'Base';
-        let label = this.selectLabel(data.properties);
+        let fType = data.labels.filter((w) => w !== 'Base');
+        let type = fType.length > 0 ? fType[0] : 'Unknown';
+        let label = (data.properties.name || data.properties.azname) || data.properties.objectid;
 
         let node = {
             id: id,
@@ -1050,7 +1040,7 @@ class GraphContainer extends Component {
     }
 
     unfoldEdgeNode(id) {
-        const sigmaInstance = this.state.sigmaInstance;
+        var sigmaInstance = this.state.sigmaInstance;
         sigmaInstance.graph.read(sigmaInstance.graph.nodes(id).folded);
         this.state.design.deprecate();
         this.state.design.apply();
@@ -1058,7 +1048,7 @@ class GraphContainer extends Component {
     }
 
     foldEdgeNode(id) {
-        const sigmaInstance = this.state.sigmaInstance;
+        var sigmaInstance = this.state.sigmaInstance;
         $.each(sigmaInstance.graph.nodes(id).folded.nodes, function (_, node) {
             sigmaInstance.graph.dropNode(node.id);
         });
@@ -1069,8 +1059,8 @@ class GraphContainer extends Component {
     }
 
     ungroupNode(id) {
-        const sigmaInstance = this.state.sigmaInstance;
-        const node = sigmaInstance.graph.nodes(id);
+        var sigmaInstance = this.state.sigmaInstance;
+        var node = sigmaInstance.graph.nodes(id);
         node.glyphs = node.glyphs.filter((glyph) => {
             return glyph.position !== 'bottom-left';
         });
@@ -1129,8 +1119,8 @@ class GraphContainer extends Component {
 
     //Function taken from the DragNodes code https://github.com/jacomyal/sigma.js/blob/master/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js
     calculateOffset(element) {
-        const style = window.getComputedStyle(element);
-        const getCssProperty = function (prop) {
+        var style = window.getComputedStyle(element);
+        var getCssProperty = function (prop) {
             return (
                 parseInt(style.getPropertyValue(prop).replace('px', '')) || 0
             );
@@ -1160,7 +1150,7 @@ class GraphContainer extends Component {
         let _s = this.state.sigmaInstance;
         let _camera = _s.camera;
         let _prefix = _s.renderers[0].options.prefix;
-        const offset = this.calculateOffset(_s.renderers[0].container),
+        var offset = this.calculateOffset(_s.renderers[0].container),
             x = clientX - offset.left,
             y = clientY - offset.top,
             cos = Math.cos(_camera.angle),
@@ -1211,19 +1201,19 @@ class GraphContainer extends Component {
             context,
             threshold
         ) {
-            const font = node.icon.font || 'Arial',
+            var font = node.icon.font || 'Arial',
                 fgColor = node.icon.color || '#F00',
                 text = node.icon.content || '?',
                 px = node.icon.x || 0.5,
                 py = node.icon.y || 0.5,
                 height = size,
                 width = size;
-            let fontSizeRatio = 0.7;
+            var fontSizeRatio = 0.7;
             if (typeof node.icon.scale === 'number') {
                 fontSizeRatio = Math.abs(Math.max(0.01, node.icon.scale));
             }
 
-            const fontSize = Math.round(fontSizeRatio * height);
+            var fontSize = Math.round(fontSizeRatio * height);
 
             context.save();
             context.fillStyle = fgColor;
@@ -1240,28 +1230,35 @@ class GraphContainer extends Component {
             writePrefix,
             options
         ) {
-            const _this = this;
-            let i, l, a, b, c, d, scale, margin;
-            const n = this.graph.nodes(),
+            var _this = this,
+                i,
+                l,
+                a,
+                b,
+                c,
+                d,
+                scale,
+                margin,
+                n = this.graph.nodes(),
                 e = this.graph.edges(),
                 settings = this.settings.embedObjects(options || {}),
                 bounds =
                     settings('bounds') ||
-                    sigma.utils.getBoundaries(this.graph, readPrefix, true);
-            let minX = bounds.minX,
+                    sigma.utils.getBoundaries(this.graph, readPrefix, true),
+                minX = bounds.minX,
                 minY = bounds.minY,
                 maxX = bounds.maxX,
-                maxY = bounds.maxY;
-            const sizeMax = bounds.sizeMax,
+                maxY = bounds.maxY,
+                sizeMax = bounds.sizeMax,
                 weightMax = bounds.weightMax,
                 w = settings('width') || 1,
-                h = settings('height') || 1;
-            let rescaleSettings = settings('autoRescale');
-            const validSettings = {
-                nodePosition: 1,
-                nodeSize: 1,
-                edgeSize: 1,
-            };
+                h = settings('height') || 1,
+                rescaleSettings = settings('autoRescale'),
+                validSettings = {
+                    nodePosition: 1,
+                    nodeSize: 1,
+                    edgeSize: 1,
+                };
             /**
              * What elements should we rescale?
              */
@@ -1276,7 +1273,7 @@ class GraphContainer extends Component {
                             '" is not recognized.'
                     );
 
-            const np = ~rescaleSettings.indexOf('nodePosition'),
+            var np = ~rescaleSettings.indexOf('nodePosition'),
                 ns = ~rescaleSettings.indexOf('nodeSize'),
                 es = ~rescaleSettings.indexOf('edgeSize');
 
@@ -1517,34 +1514,30 @@ class GraphContainer extends Component {
                 let mode = appStore.performance.nodeLabels;
                 let sigmaInstance = this.state.sigmaInstance;
 
-                if (document.activeElement === document.body) {
-                    if (this.state.ctrlDown && !this.state.otherDown) {
-                        mode = mode + 1;
-                        if (mode > 2) {
-                            mode = 0;
-                        }
-                        appStore.performance.nodeLabels = mode;
-                        conf.set('performance', appStore.performance);
-
-                        if (mode === 2) {
-                            sigmaInstance.settings('labelThreshold', 500);
-                            this.props.alert.info('Hiding Node Labels');
-                        } else if (mode === 0) {
-                            sigmaInstance.settings('labelThreshold', 15);
-                            this.props.alert.info(
-                                'Default Node Label Threshold'
-                            );
-                        } else {
-                            sigmaInstance.settings('labelThreshold', 1);
-                            this.props.alert.info('Always Showing Node Labels');
-                        }
-
-                        sigmaInstance.refresh({ skipIndexation: true });
-                    } else if (e.key === 'Backspace') {
-                        emitter.emit('graphBack');
-                    } else if (e.key === 's') {
-                        jQuery('#tabcontainer').slideToggle('fast');
+                if (
+                    document.activeElement === document.body &&
+                    this.state.ctrlDown &&
+                    !this.state.otherDown
+                ) {
+                    mode = mode + 1;
+                    if (mode > 2) {
+                        mode = 0;
                     }
+                    appStore.performance.nodeLabels = mode;
+                    conf.set('performance', appStore.performance);
+
+                    if (mode === 2) {
+                        sigmaInstance.settings('labelThreshold', 500);
+                        this.props.alert.info('Hiding Node Labels');
+                    } else if (mode === 0) {
+                        sigmaInstance.settings('labelThreshold', 15);
+                        this.props.alert.info('Default Node Label Threshold');
+                    } else {
+                        sigmaInstance.settings('labelThreshold', 1);
+                        this.props.alert.info('Always Showing Node Labels');
+                    }
+
+                    sigmaInstance.refresh({ skipIndexation: true });
                 }
 
                 this.setState({
@@ -1555,7 +1548,7 @@ class GraphContainer extends Component {
         );
 
         //Plugin Configuration
-        const dragListener = sigma.plugins.dragNodes(
+        var dragListener = sigma.plugins.dragNodes(
             sigmaInstance,
             sigmaInstance.renderers[0]
         );
@@ -1563,7 +1556,7 @@ class GraphContainer extends Component {
         dragListener.bind('drag', this._nodeDragged.bind(this));
 
         //Layout Plugins
-        const forcelinkListener = sigma.layouts.configForceLink(sigmaInstance, {
+        var forcelinkListener = sigma.layouts.configForceLink(sigmaInstance, {
             worker: true,
             background: true,
             easing: 'cubicInOut',
@@ -1583,7 +1576,7 @@ class GraphContainer extends Component {
             emitter.emit('showLoadingIndicator', true);
         });
 
-        const dagreListener = sigma.layouts.dagre.configure(sigmaInstance, {
+        var dagreListener = sigma.layouts.dagre.configure(sigmaInstance, {
             easing: 'cubicInOut',
             boundingBox: {
                 minX: 0,
@@ -1596,7 +1589,7 @@ class GraphContainer extends Component {
         });
 
         dagreListener.bind('stop', (event) => {
-            let needsfix = false;
+            var needsfix = false;
             sigmaInstance.graph.nodes().forEach(function (node) {
                 if (isNaN(node.x) || isNaN(node.y)) {
                     emitter.emit('updateLoadingText', 'Fixing Overlap');
@@ -1628,7 +1621,7 @@ class GraphContainer extends Component {
         // });
         //
 
-        const noverlapListener = sigmaInstance.configNoverlap({});
+        var noverlapListener = sigmaInstance.configNoverlap({});
 
         noverlapListener.bind('stop', (event) => {
             emitter.emit('updateLoadingText', 'Done!');
@@ -1639,7 +1632,7 @@ class GraphContainer extends Component {
             }, 1500);
         });
 
-        const lowgfx = appStore.performance.lowGraphics;
+        var lowgfx = appStore.performance.lowGraphics;
 
         design = sigma.plugins.design(sigmaInstance);
         if (lowgfx) {
@@ -1654,7 +1647,7 @@ class GraphContainer extends Component {
             design.setStyles(appStore.highResStyle);
         }
 
-        const mode = appStore.performance.nodeLabels;
+        var mode = appStore.performance.nodeLabels;
 
         if (mode === 2) {
             sigmaInstance.settings('labelThreshold', 500);

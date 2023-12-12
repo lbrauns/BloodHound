@@ -1,12 +1,6 @@
-import React from 'react';
-
 const Opsec = () => {
-    return (
-        <p>
-            Auzre will create a log event whenever a new secret is created for a
-            service principal.
-        </p>
-    );
+    let text = `Auzre will create a log event whenever a new secret is created for a service principal.`;
+    return { __html: text };
 };
 
 export default Opsec;

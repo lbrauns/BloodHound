@@ -1,12 +1,6 @@
-import React from 'react';
-
 const Opsec = () => {
-    return (
-        <p>
-            This depends on what you do, see other edges as far as opsec
-            considerations for activating roles
-        </p>
-    );
+    let text = `This depends on what you do, see other edges as far as opsec considerations for activating roles`;
+    return { __html: text };
 };
 
 export default Opsec;

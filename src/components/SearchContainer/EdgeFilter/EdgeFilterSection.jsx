@@ -1,6 +1,8 @@
-import React, {useContext} from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './EdgeFilter.module.css';
-import {AppContext} from '../../../AppContext';
+import { useContext } from 'react';
+import { AppContext } from '../../../AppContext';
 
 const EdgeFilterSection = ({ title, edges, sectionName }) => {
     const context = useContext(AppContext);

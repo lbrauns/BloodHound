@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import {
     Panel,
     Button,
@@ -10,6 +11,7 @@ import {
     Checkbox,
 } from 'react-bootstrap';
 import styles from './Settings.module.css';
+import Draggable from 'react-draggable';
 import clsx from 'clsx';
 import { AppContext } from '../../AppContext';
 import PoseContainer from '../PoseContainer';

@@ -15,9 +15,9 @@
     height: 15%;
     background: #b9babd;
     border-radius: 13px 13px 0 0;
-    font-family: Helvetica, serif;
+    font-family: Helvetica;
     font-size: 23px;
-    padding: 5px 5px 0 10px;
+    padding: 5px 5px 0px 10px;
     cursor: move;
 }
 
@@ -70,7 +70,8 @@
 }
 
 .closeButton {
-    background: transparent no-repeat;
+    background: transparent;
+    background-repeat: no-repeat;
     border: none;
     cursor: pointer;
     overflow: hidden;
@@ -80,6 +81,7 @@
 }
 
 .closeButton:hover {
-    background: transparent no-repeat;
+    background: transparent;
+    background-repeat: no-repeat;
     color: white;
 }

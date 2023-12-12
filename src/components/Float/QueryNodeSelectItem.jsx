@@ -3,7 +3,7 @@ import { ListGroupItem } from 'react-bootstrap';
 
 export default class QueryNodeSelectItem extends Component {
     convertToDisplayProp() {
-        let str = '';
+        var str = '';
         $.each(
             Object.keys(this.props.extraProps),
             function(_, prop) {
@@ -12,8 +12,8 @@ export default class QueryNodeSelectItem extends Component {
                 }
 
                 let obj = this.props.extraProps[prop];
-                const type = typeof obj;
-                let val;
+                var type = typeof obj;
+                let val = null;
                 if (type === 'undefined') {
                     val = null;
                 } else if (type === 'number') {

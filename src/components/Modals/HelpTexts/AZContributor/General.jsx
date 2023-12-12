@@ -1,13 +1,8 @@
-import React from 'react';
+import { groupSpecialFormat, typeFormat } from '../Formatter';
 
-const General = () => {
-    return (
-        <p>
-            The contributor role grants almost all abusable privileges in all
-            circumstances, with some exceptions. Those exceptions are not
-            collected by AzureHound.
-        </p>
-    );
+const General = (sourceName, sourceType, targetName, targetType) => {
+    let text = `The contributor role grants almost all abusable privileges in all circumstances, with some exceptions. Those exceptions are not collected by AzureHound.`;
+    return { __html: text };
 };
 
 export default General;

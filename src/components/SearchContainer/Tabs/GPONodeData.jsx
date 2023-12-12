@@ -1,13 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import CollapsibleSection from './Components/CollapsibleSection';
 import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import NodeCypherLink from './Components/NodeCypherLink';
+import NodeCypherNoNumberLink from './Components/NodeCypherNoNumberLink';
 import MappedNodeProps from './Components/MappedNodeProps';
 import ExtraNodeProps from './Components/ExtraNodeProps';
 import NodePlayCypherLink from './Components/NodePlayCypherLink';
+import Notes from './Components/Notes';
+import { withAlert } from 'react-alert';
+import NodeGallery from './Components/NodeGallery';
 import { Table } from 'react-bootstrap';
 import styles from './NodeData.module.css';
+import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 
 const GPONodeData = () => {
@@ -111,7 +117,7 @@ const GPONodeData = () => {
                                     property='Directly Affected OUs'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (m:GPO {objectid: $objectid})-[r:GPLink]->(n)'
+                                        'MATCH p = (m:GPO {objectid: $objectid})-[r:GpLink]->(n)'
                                     }
                                     start={label}
                                 />
@@ -119,7 +125,7 @@ const GPONodeData = () => {
                                     property='Affected OUs'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (m:GPO {objectid: $objectid})-[r:GPLink|Contains*1..]->(n) WHERE n:OU OR n:Domain'
+                                        'MATCH p = (m:GPO {objectid: $objectid})-[r:GpLink|Contains*1..]->(n) WHERE n:OU OR n:Domain'
                                     }
                                     start={label}
                                 />
@@ -127,20 +133,20 @@ const GPONodeData = () => {
                                     property='Computer Objects'
                                     target={objectid}
                                     countQuery={
-                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GPLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GPLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GPLink]->(container1)-[r2:Contains*1..]->(n1:Computer) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GPLink]->(container2)-[r2:Contains*1..]->(n2:Computer) RETURN count(n1) + count(n2)"
+                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GpLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GpLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GpLink]->(container1)-[r2:Contains*1..]->(n1:Computer) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GpLink]->(container2)-[r2:Contains*1..]->(n2:Computer) RETURN count(n1) + count(n2)"
                                     }
                                     graphQuery={
-                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GPLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GPLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GPLink]->(container1)-[r2:Contains*1..]->(n1:Computer) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GPLink]->(container2)-[r2:Contains*1..]->(n2:Computer) RETURN p1,p2"
+                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GpLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GpLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GpLink]->(container1)-[r2:Contains*1..]->(n1:Computer) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GpLink]->(container2)-[r2:Contains*1..]->(n2:Computer) RETURN p1,p2"
                                     }
                                 />
                                 <NodeCypherLinkComplex
                                     property='User Objects'
                                     target={objectid}
                                     countQuery={
-                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GPLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GPLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GPLink]->(container1)-[r2:Contains*1..]->(n1:User) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GPLink]->(container2)-[r2:Contains*1..]->(n2:User) RETURN count(n1) + count(n2)"
+                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GpLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GpLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GpLink]->(container1)-[r2:Contains*1..]->(n1:User) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GpLink]->(container2)-[r2:Contains*1..]->(n2:User) RETURN count(n1) + count(n2)"
                                     }
                                     graphQuery={
-                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GPLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GPLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GPLink]->(container1)-[r2:Contains*1..]->(n1:User) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GPLink]->(container2)-[r2:Contains*1..]->(n2:User) RETURN p1,p2"
+                                        "MATCH (g:GPO {objectid: $objectid}) OPTIONAL MATCH (g)-[r1:GpLink {enforced:false}]->(container1) WITH g,container1 OPTIONAL MATCH (g)-[r2:GpLink {enforced:true}]->(container2) WITH g,container1,container2 OPTIONAL MATCH p1 = (g)-[r1:GpLink]->(container1)-[r2:Contains*1..]->(n1:User) WHERE NONE(x in NODES(p1) WHERE x.blocksinheritance = true AND LABELS(x) = 'OU') WITH g,p1,container2,n1 OPTIONAL MATCH p2 = (g)-[r1:GpLink]->(container2)-[r2:Contains*1..]->(n2:User) RETURN p1,p2"
                                     }
                                 />
                             </tbody>
@@ -159,7 +165,7 @@ const GPONodeData = () => {
                                     property='Explicit Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AddMember|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(g:GPO {objectid: $objectid})'
+                                        'MATCH p = (n)-[r:AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(g:GPO {objectid: $objectid})'
                                     }
                                     end={label}
                                     distinct
@@ -177,7 +183,7 @@ const GPONodeData = () => {
                                     property='Transitive Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid= $objectid WITH n MATCH p = shortestPath((n)-[r:MemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(g:GPO {objectid: $objectid}))'
+                                        'MATCH (n) WHERE NOT n.objectid= $objectid WITH n MATCH p = shortestPath((n)-[r:MemberOf|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(g:GPO {objectid: $objectid}))'
                                     }
                                     end={label}
                                     distinct

@@ -1,11 +1,6 @@
-import React from 'react';
-
 const References = () => {
-    return (
-        <a href='https://dirkjanm.io/azure-ad-privilege-escalation-application-admin/'>
-            https://dirkjanm.io/azure-ad-privilege-escalation-application-admin/
-        </a>
-    );
+    let text = `<a href='https://dirkjanm.io/azure-ad-privilege-escalation-application-admin/'>https://dirkjanm.io/azure-ad-privilege-escalation-application-admin/</a>`;
+    return { __html: text };
 };
 
 export default References;

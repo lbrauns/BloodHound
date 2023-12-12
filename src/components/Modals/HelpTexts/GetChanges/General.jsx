@@ -1,28 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { groupSpecialFormat } from '../Formatter';
+import { groupSpecialFormat, typeFormat } from '../Formatter';
 
-const General = ({ sourceName, sourceType, targetName }) => {
-    return (
-        <>
-            <p>
-                {groupSpecialFormat(sourceType, sourceName)} the
-                DS-Replication-Get-Changes privilege on the domain {targetName}.
-            </p>
-            <p>
-                Individually, this edge does not grant the ability to perform an
-                attack. However, in conjunction with
-                DS-Replication-Get-Changes-All, a principal may perform a DCSync
-                attack.
-            </p>
-        </>
-    );
-};
-
-General.propTypes = {
-    sourceName: PropTypes.string,
-    sourceType: PropTypes.string,
-    targetName: PropTypes.string,
+const General = (sourceName, sourceType, targetName, targetType) => {
+    let text = `${groupSpecialFormat(
+        sourceType,
+        sourceName
+    )} the DS-Replication-Get-Changes privilege on the domain ${targetName}.
+    
+    Individually, this edge does not grant the ability to perform an attack. However, in conjunction with DS-Replication-Get-Changes-All, a principal may perform a DCSync attack.`;
+    return { __html: text };
 };
 
 export default General;

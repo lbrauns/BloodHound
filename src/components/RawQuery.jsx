@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import { motion } from 'framer-motion';

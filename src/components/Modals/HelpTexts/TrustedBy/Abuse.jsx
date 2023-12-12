@@ -1,7 +1,7 @@
-import React from 'react';
-
-const Abuse = () => {
-    return <p>There is no abuse associated with this edge.</p>;
+import { typeFormat } from '../Formatter';
+const Abuse = (sourceName, sourceType, targetName, targetType) => {
+    let text = `There is no abuse associated with this edge.`;
+    return { __html: text };
 };
 
 export default Abuse;

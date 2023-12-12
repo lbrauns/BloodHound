@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const NodeCypherLabel = ({ property, target, baseQuery, domain }) => {
     const [ready, setReady] = useState(false);

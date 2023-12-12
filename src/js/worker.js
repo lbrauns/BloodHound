@@ -1,41 +1,41 @@
 global.sigma = require('linkurious');
 require('./sigma.helpers.graph.min.js');
-Array.prototype.allEdgesSameType = function () {
-    for (let i = 1; i < this.length; i++) {
+Array.prototype.allEdgesSameType = function() {
+    for (var i = 1; i < this.length; i++) {
         if (this[i].type !== this[0].type) return false;
     }
 
     return true;
 };
 
-let sigmaInstance = new sigma();
+var sigmaInstance = new sigma();
 
-process.on('message', function (m) {
-    const data = JSON.parse(m);
-    const params = {
+process.on('message', function(m) {
+    var data = JSON.parse(m);
+    params = {
         edge: data.edge,
         sibling: data.sibling,
         start: data.start,
         end: data.end,
     };
-    let spotlightData = {};
+    var spotlightData = {};
     sigmaInstance.graph.clear();
     sigmaInstance.graph.read(data.graph);
-    sigmaInstance.graph.nodes().forEach(function (node) {
+    sigmaInstance.graph.nodes().forEach(function(node) {
         node.degree = sigmaInstance.graph.degree(node.id);
     });
-    const result = collapseEdgeNodes(sigmaInstance, params, spotlightData);
+    var result = collapseEdgeNodes(sigmaInstance, params, spotlightData);
     sigmaInstance = result[0];
     spotlightData = result[1];
     //result = collapseSiblingNodes(sigmaInstance, params, spotlightData);
     //sigmaInstance = result[0];
     //spotlightData = result[1];
-    sigmaInstance.graph.nodes().forEach(function (node) {
+    sigmaInstance.graph.nodes().forEach(function(node) {
         if (!spotlightData.hasOwnProperty(node.id)) {
             spotlightData[node.id] = [node.label, 0, '', node.type, ''];
         }
     });
-    const toSend = {
+    var toSend = {
         nodes: sigmaInstance.graph.nodes(),
         edges: sigmaInstance.graph.edges(),
         spotlight: spotlightData,
@@ -44,12 +44,12 @@ process.on('message', function (m) {
 });
 
 function collapseEdgeNodes(sigmaInstance, params, spotlightData) {
-    const threshold = params.edge;
+    var threshold = params.edge;
 
     if (threshold === 0) {
         return [sigmaInstance, spotlightData];
     }
-    sigmaInstance.graph.nodes().forEach(function (node) {
+    sigmaInstance.graph.nodes().forEach(function(node) {
         if (node.degree < threshold) {
             return;
         }
@@ -62,7 +62,7 @@ function collapseEdgeNodes(sigmaInstance, params, spotlightData) {
             return;
         }
 
-        sigmaInstance.graph.adjacentNodes(node.id).forEach(function (anode) {
+        sigmaInstance.graph.adjacentNodes(node.id).forEach(function(anode) {
             if (params.end !== null && anode.label === params.end) {
                 return;
             }
@@ -71,7 +71,7 @@ function collapseEdgeNodes(sigmaInstance, params, spotlightData) {
                 return;
             }
 
-            const edges = sigmaInstance.graph.adjacentEdges(anode.id);
+            var edges = sigmaInstance.graph.adjacentEdges(anode.id);
             if (
                 edges.length > 1 ||
                 edges.length === 0 ||
@@ -80,7 +80,7 @@ function collapseEdgeNodes(sigmaInstance, params, spotlightData) {
                 return;
             }
 
-            const edge = edges[0];
+            var edge = edges[0];
 
             if (
                 anode.type_user ||
@@ -112,13 +112,13 @@ function collapseEdgeNodes(sigmaInstance, params, spotlightData) {
 }
 
 function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
-    const threshold = params.sibling;
+    var threshold = params.sibling;
 
     if (threshold === 0) {
         return [sigmaInstance, spotlightData];
     }
 
-    sigmaInstance.graph.nodes().forEach(function (node) {
+    sigmaInstance.graph.nodes().forEach(function(node) {
         //Dont apply this logic to anything thats folded or isn't a computer
         if (!node.type_computer || node.folded.nodes.length > 0) {
             return;
@@ -133,27 +133,27 @@ function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
         }
 
         //Start by getting all the edges attached to this node
-        const adjacent = sigmaInstance.graph.adjacentEdges(node.id);
-        const siblings = [];
+        var adjacent = sigmaInstance.graph.adjacentEdges(node.id);
+        var siblings = [];
 
         //Check to see if all the edges are the same type (i.e. AdminTo)
         if (adjacent.length > 1 && adjacent.allEdgesSameType()) {
             //Get the "parents" by mapping the source from every edge
-            const parents = adjacent.map(function (e) {
+            var parents = adjacent.map(function(e) {
                 return e.source;
             });
 
             //Generate our string to compare other nodes to
             //by sorting the parents and turning it into a string
-            const checkString = parents.sort().join(',');
-            let testString;
+            var checkString = parents.sort().join(',');
+            var testString;
 
             //Loop back over nodes in the graph and look for any nodes
             //with identical parents
-            sigmaInstance.graph.nodes().forEach(function (node2) {
+            sigmaInstance.graph.nodes().forEach(function(node2) {
                 testString = sigmaInstance.graph
                     .adjacentEdges(node2.id)
-                    .map(function (e) {
+                    .map(function(e) {
                         return e.source;
                     })
                     .sort()
@@ -165,7 +165,7 @@ function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
 
             if (siblings.length >= threshold) {
                 //Generate a new ID for our grouped node
-                const nodeId = generateUniqueId(sigmaInstance, true);
+                var nodeId = generateUniqueId(sigmaInstance, true);
 
                 sigmaInstance.graph.addNode({
                     id: nodeId,
@@ -189,8 +189,8 @@ function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
                 });
 
                 //Generate new edges for each parent going to our new node
-                parents.forEach(function (parent) {
-                    const id = generateUniqueId(sigmaInstance, false);
+                parents.forEach(function(parent) {
+                    var id = generateUniqueId(sigmaInstance, false);
 
                     sigmaInstance.graph.addEdge({
                         id: id,
@@ -202,13 +202,13 @@ function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
                     });
                 });
 
-                const n = sigmaInstance.graph.nodes(nodeId);
+                var n = sigmaInstance.graph.nodes(nodeId);
                 //Loop over all the siblings, and push the edges into our new parent node
                 //Push the nodes in as well so we can unfold them
-                siblings.forEach(function (sibling) {
+                siblings.forEach(function(sibling) {
                     sigmaInstance.graph
                         .adjacentEdges(sibling.id)
-                        .forEach(function (edge) {
+                        .forEach(function(edge) {
                             n.folded.edges.push(edge);
                         });
 
@@ -229,7 +229,7 @@ function collapseSiblingNodes(sigmaInstance, params, spotlightData) {
 }
 
 function generateUniqueId(sigmaInstance, isNode) {
-    let i = Math.floor(Math.random() * (100000 - 10 + 1)) + 10;
+    var i = Math.floor(Math.random() * (100000 - 10 + 1)) + 10;
     if (isNode) {
         while (typeof sigmaInstance.graph.nodes(i) !== 'undefined') {
             i = Math.floor(Math.random() * (100000 - 10 + 1)) + 10;

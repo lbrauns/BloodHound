@@ -1,10 +1,3 @@
-.. note::
-   This documentation applies to Legacy BloodHound and is no longer maintained.
-
-   See up-to-date documentation for BloodHound CE here: `BloodHound Support`_
-
-.. _BloodHound Support: https://support.bloodhoundenterprise.io/hc/en-us
-
 BloodHound: Six Degrees of Domain Admin
 =======================================
 
@@ -105,7 +98,6 @@ Need assistance? Join us in the `BloodHound Gang Slack`_
    data-collection/sharphound
    data-collection/sharphound-all-flags
    data-collection/azurehound
-   data-collection/azurehound-all-flags
    data-collection/bloodhound-py
 
 .. toctree::

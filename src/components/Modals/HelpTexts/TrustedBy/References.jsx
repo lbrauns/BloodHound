@@ -1,7 +1,6 @@
-import React from 'react';
-
 const References = () => {
-    return <></>;
+    let text = ``;
+    return { __html: text };
 };
 
 export default References;

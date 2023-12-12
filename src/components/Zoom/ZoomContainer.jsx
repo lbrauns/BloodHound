@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 export default class ZoomContainer extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             darkMode: false,

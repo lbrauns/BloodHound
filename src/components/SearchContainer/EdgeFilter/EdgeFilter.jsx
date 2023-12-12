@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
+import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 import styles from './EdgeFilter.module.css';
 import EdgeFilterCheck from './EdgeFilterCheck';
@@ -56,13 +58,6 @@ const EdgeFilter = ({ open }) => {
                             'WriteOwner',
                             'ReadLAPSPassword',
                             'ReadGMSAPassword',
-                            'AddKeyCredentialLink',
-                            'WriteSPN',
-                            'AddSelf',
-                            'AddAllowedToAct',
-                            'DCSync',
-                            'SyncLAPSPassword',
-                            'WriteAccountRestrictions',
                         ]}
                         sectionName='ACL'
                     />
@@ -76,20 +71,13 @@ const EdgeFilter = ({ open }) => {
                     <EdgeFilterCheck name='WriteOwner' />
                     <EdgeFilterCheck name='ReadLAPSPassword' />
                     <EdgeFilterCheck name='ReadGMSAPassword' />
-                    <EdgeFilterCheck name='AddKeyCredentialLink' />
-                    <EdgeFilterCheck name='WriteSPN' />
-                    <EdgeFilterCheck name='AddSelf' />
-                    <EdgeFilterCheck name='AddAllowedToAct' />
-                    <EdgeFilterCheck name='WriteAccountRestrictions' />
-                    <EdgeFilterCheck name='DCSync' />
-                    <EdgeFilterCheck name='SyncLAPSPassword' />
                     <EdgeFilterSection
                         title='Containers'
                         sectionName='container'
-                        edges={['Contains', 'GPLink']}
+                        edges={['Contains', 'GpLink']}
                     />
                     <EdgeFilterCheck name='Contains' />
-                    <EdgeFilterCheck name='GPLink' />
+                    <EdgeFilterCheck name='GpLink' />
                     <EdgeFilterSection
                         title='Special'
                         sectionName='special'
@@ -98,106 +86,58 @@ const EdgeFilter = ({ open }) => {
                             'CanPSRemote',
                             'ExecuteDCOM',
                             'AllowedToDelegate',
+                            'AddAllowedToAct',
                             'AllowedToAct',
                             'SQLAdmin',
                             'HasSIDHistory',
-                            'DumpSMSAPassword',
                         ]}
                     />
                     <EdgeFilterCheck name='CanRDP' />
                     <EdgeFilterCheck name='CanPSRemote' />
                     <EdgeFilterCheck name='ExecuteDCOM' />
                     <EdgeFilterCheck name='AllowedToDelegate' />
+                    <EdgeFilterCheck name='AddAllowedToAct' />
                     <EdgeFilterCheck name='AllowedToAct' />
                     <EdgeFilterCheck name='SQLAdmin' />
                     <EdgeFilterCheck name='HasSIDHistory' />
-                    <EdgeFilterCheck name='DumpSMSAPassword' />
                 </div>
                 <div>
                     <EdgeFilterSection
                         title='Azure Edges'
                         edges={[
-                            'AZAvereContributor',
+                            'AZAddMembers',
                             'AZContains',
                             'AZContributor',
                             'AZGetCertificates',
                             'AZGetKeys',
                             'AZGetSecrets',
-                            'AZHasRole',
-                            'AZMemberOf',
-                            'AZRunsAs',
-                            'AZVMContributor',
-                            'AZVMAdminLogin',
-                            'AZAddMembers',
-                            'AZAddSecret',
-                            'AZExecuteCommand',
                             'AZGlobalAdmin',
-                            'AZPrivilegedAuthAdmin',
+                            'AZOwns',
                             'AZPrivilegedRoleAdmin',
                             'AZResetPassword',
                             'AZUserAccessAdministrator',
-                            'AZOwns',
-                            'AZCloudAppAdmin',
                             'AZAppAdmin',
-                            'AZAddOwner',
-                            'AZManagedIdentity',
+                            'AZCloudAppAdmin',
+                            'AZRunsAs',
                             'AZKeyVaultContributor',
-                            'AZNodeResourceGroup',
-                            'AZWebsiteContributor',
-                            'AZLogicAppContributor',
-                            'AZAutomationContributor',
-                            'AZAKSContributor',
                         ]}
                         sectionName='azure'
                     />
-                    <EdgeFilterCheck name='AZAvereContributor' />
+                    <EdgeFilterCheck name='AZAddMembers' />
                     <EdgeFilterCheck name='AZContains' />
                     <EdgeFilterCheck name='AZContributor' />
                     <EdgeFilterCheck name='AZGetCertificates' />
                     <EdgeFilterCheck name='AZGetKeys' />
                     <EdgeFilterCheck name='AZGetSecrets' />
-                    <EdgeFilterCheck name='AZHasRole' />
-                    <EdgeFilterCheck name='AZMemberOf' />
-                    <EdgeFilterCheck name='AZRunsAs' />
-                    <EdgeFilterCheck name='AZVMContributor' />
-                    <EdgeFilterCheck name='AZVMAdminLogin' />
-                    <EdgeFilterCheck name='AZAddMembers' />
-                    <EdgeFilterCheck name='AZAddSecret' />
-                    <EdgeFilterCheck name='AZExecuteCommand' />
                     <EdgeFilterCheck name='AZGlobalAdmin' />
-                    <EdgeFilterCheck name='AZPrivilegedAuthAdmin' />
+                    <EdgeFilterCheck name='AZOwns' />
                     <EdgeFilterCheck name='AZPrivilegedRoleAdmin' />
                     <EdgeFilterCheck name='AZResetPassword' />
                     <EdgeFilterCheck name='AZUserAccessAdministrator' />
-                    <EdgeFilterCheck name='AZOwns' />
-                    <EdgeFilterCheck name='AZCloudAppAdmin' />
                     <EdgeFilterCheck name='AZAppAdmin' />
-                    <EdgeFilterCheck name='AZAddOwner' />
-                    <EdgeFilterCheck name='AZManagedIdentity' />
+                    <EdgeFilterCheck name='AZCloudAppAdmin' />
+                    <EdgeFilterCheck name='AZRunsAs' />
                     <EdgeFilterCheck name='AZKeyVaultContributor' />
-                    <EdgeFilterCheck name='AZNodeResourceGroup' />
-                    <EdgeFilterCheck name='AZWebsiteContributor' />
-                    <EdgeFilterCheck name='AZLogicAppContributor' />
-                    <EdgeFilterCheck name='AZAutomationContributor' />
-                    <EdgeFilterCheck name='AZAKSContributor' />
-                </div>
-                <div>
-                    <EdgeFilterSection
-                        title='MS Graph App Roles'
-                        edges={[
-                            'AZMGAddSecret',
-                            'AZMGAddOwner',
-                            'AZMGAddMember',
-                            'AZMGGrantAppRoles',
-                            'AZMGGrantRole',
-                        ]}
-                        sectionName='msgraphapproles'
-                    />
-                    <EdgeFilterCheck name='AZMGAddSecret' />
-                    <EdgeFilterCheck name='AZMGAddOwner' />
-                    <EdgeFilterCheck name='AZMGAddMember' />
-                    <EdgeFilterCheck name='AZMGGrantAppRoles' />
-                    <EdgeFilterCheck name='AZMGGrantRole' />
                 </div>
                 <div>
                     <EdgeFilterSection

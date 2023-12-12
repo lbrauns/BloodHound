@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Icon from '../../../Icon';
 import styles from './NodePlayCypherLink.module.css';
 import NodeALink from './NodeALink';
@@ -60,17 +61,8 @@ const NodePlayCypherLink = ({
             domain: domain,
         })
             .then((result) => {
-                setValue(result.records[0].get(0));
+                setValue(result.records[0]._fields[0]);
                 setReady(true);
-            })
-            .then(() => {
-                emitter.emit(
-                    'query',
-                    `${baseQuery} RETURN p`,
-                    { objectid: target, domain: domain },
-                    start,
-                    end
-                );
             })
             .catch((error) => {
                 if (
@@ -86,8 +78,13 @@ const NodePlayCypherLink = ({
     };
 
     return (
-        <tr onClick={onClick} style={{ cursor: 'pointer' }}>
-            <td align='left'>{property}</td>
+        <tr
+            onClick={onClick}
+            style={{ cursor: 'pointer' }}
+        >
+            <td align='left'>
+                {property}
+            </td>
             <td align='right'>
                 {!played && <Icon glyph='play' extraClass={styles.icon} />}
                 {played && <NodeALink ready={ready} value={value} />}

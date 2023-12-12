@@ -26,7 +26,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { AppContext } from './AppContext';
 import GraphErrorModal from './components/Modals/GraphErrorModal';
 import MenuContainer from './components/Menu/MenuContainer';
-import QueryCustomCreate from './components/Float/QueryCustomCreate';
 
 const fullEdgeList = [
     'CanRDP',
@@ -38,21 +37,13 @@ const fullEdgeList = [
     'SQLAdmin',
     'HasSIDHistory',
     'AZAddMembers',
-    'AZAddOwner',
-    'AZAddSecret',
-    'AZAvereContributor',
     'AZContains',
     'AZContributor',
-    'AZExecuteCommand',
     'AZGetCertificates',
     'AZGetKeys',
     'AZGetSecrets',
     'AZGlobalAdmin',
-    'AZHasRole',
-    'AZManagedIdentity',
-    'AZMemberOf',
     'AZOwns',
-    'AZPrivilegedAuthAdmin',
     'AZPrivilegedRoleAdmin',
     'AZResetPassword',
     'AZUserAccessAdministrator',
@@ -60,11 +51,8 @@ const fullEdgeList = [
     'AZCloudAppAdmin',
     'AZRunsAs',
     'AZKeyVaultContributor',
-    'AZVMAdminLogin',
-    'AZVMContributor',
-    'AZLogicAppContributor',
     'Contains',
-    'GPLink',
+    'GpLink',
     'AllExtendedRights',
     'AddMember',
     'ForceChangePassword',
@@ -78,12 +66,6 @@ const fullEdgeList = [
     'MemberOf',
     'HasSession',
     'AdminTo',
-    'AddSelf',
-    'WriteSPN',
-    'AddKeyCredentialLink',
-    'DumpSMSAPassword',
-    'DCSync',
-    'SyncLAPSPassword'
     'NtfsPublish',
     'NtfsOwner',
     'NtfsFullControl',
@@ -239,7 +221,6 @@ export default class AppContainer extends Component {
                             <NodeEditor />
                             <HelpModal />
                             <GraphErrorModal />
-                            <QueryCustomCreate />
                         </div>
                     </AppContext.Provider>
                 </CSSTransition>

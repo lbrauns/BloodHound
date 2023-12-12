@@ -1,7 +1,6 @@
-import React from 'react';
-
 const References = () => {
-    return <a href='https://www.google.com'>References go here</a>;
+    let text = `<a href="https://www.google.com">References go here</a>`;
+    return { __html: text };
 };
 
 export default References;

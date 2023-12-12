@@ -1,10 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import CollapsibleSection from './Components/CollapsibleSection';
+import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import NodeCypherLink from './Components/NodeCypherLink';
+import NodeCypherNoNumberLink from './Components/NodeCypherNoNumberLink';
 import MappedNodeProps from './Components/MappedNodeProps';
+import ExtraNodeProps from './Components/ExtraNodeProps';
+import NodePlayCypherLink from './Components/NodePlayCypherLink';
+import Notes from './Components/Notes';
+import { withAlert } from 'react-alert';
+import NodeGallery from './Components/NodeGallery';
 import { Table } from 'react-bootstrap';
 import styles from './NodeData.module.css';
+import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 
 const AZDeviceNodeData = () => {
@@ -50,11 +59,6 @@ const AZDeviceNodeData = () => {
 
     const displayMap = {
         objectid: 'Object ID',
-        operatingsystem: 'OS',
-        operatingsystemversion: 'OS Version',
-        deviceid: 'Device ID',
-        displayname: 'Display Name',
-        tenantid: 'Tenant ID',
     };
 
     return objectid === null ? (
@@ -68,31 +72,6 @@ const AZDeviceNodeData = () => {
         >
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectid}</h5>
-
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    baseQuery={
-                                        'MATCH p=(:AZDevice {objectid: $objectid})-[:AZMemberOf|AZHasRole*1..]->(n:AZRole)'
-                                    }
-                                    property={'Azure AD Admin Roles'}
-                                    target={objectid}
-                                />
-                                <NodeCypherLink
-                                    property='Reachable High Value Targets'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH (m:AZDevice {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
 
                 <MappedNodeProps
                     displayMap={displayMap}
@@ -108,18 +87,18 @@ const AZDeviceNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Explicit Execution Principals'
+                                    property='Owners'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AZOwns|AZExecuteCommand]->(g:AZDevice {objectid: $objectid})'
+                                        'MATCH p = (n)-[r:AZOwns]->(g:AZDevice {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
                                 <NodeCypherLink
-                                    property='Unrolled Execution Principals'
+                                    property='InTune Admins'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (m)-[:MemberOf]->(n)-[r:AZOwns|AZExecuteCommand]->(g:AZDevice {objectid: $objectid})'
+                                        'MATCH p = (n)-[r:AZOwns]->(g:AZDevice {objectid: $objectid})'
                                     }
                                     end={label}
                                     distinct
