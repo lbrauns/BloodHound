@@ -25,6 +25,7 @@ import AZTenantNodeData from './Tabs/AZTenantNodeData';
 import AZVMNodeData from './Tabs/AZVMNodeData';
 import AZServicePrincipalNodeData from './Tabs/AZServicePrincipal';
 import AZAppNodeData from './Tabs/AZApp';
+import NtfsNodeData from './Tabs/NtfsNodeData';
 import { Tabs, Tab } from 'react-bootstrap';
 import { openSync, readSync, closeSync } from 'fs';
 import imageType from 'image-type';
@@ -67,6 +68,7 @@ class TabContainer extends Component {
             azAppVisible: false,
             azManagementGroupVisible: false,
             azRoleVisible: false,
+            ntfsVisible: false,
             selected: 1,
         };
     }
@@ -136,6 +138,8 @@ class TabContainer extends Component {
             this._azManagementGroupNodeClicked()
         } else if (type === 'AZRole') {
             this._azRoleNodeClicked()
+        } else if ( type == 'Fileshare' ){
+            this._fileShareNodeClicked();
         }
     }
 
@@ -182,6 +186,22 @@ class TabContainer extends Component {
         this.setState({
             userVisible: true,
             selected: 2
+            computerVisible: false,
+            groupVisible: false,
+            domainVisible: false,
+            gpoVisible: false,
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -190,6 +210,20 @@ class TabContainer extends Component {
         this.setState({
             groupVisible: true,
             selected: 2
+            domainVisible: false,
+            gpoVisible: false,
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -198,6 +232,21 @@ class TabContainer extends Component {
         this.setState({
             computerVisible: true,
             selected: 2
+            groupVisible: false,
+            domainVisible: false,
+            gpoVisible: false,
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -206,6 +255,19 @@ class TabContainer extends Component {
         this.setState({
             domainVisible: true,
             selected: 2
+            gpoVisible: false,
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -214,6 +276,18 @@ class TabContainer extends Component {
         this.setState({
             gpoVisible: true,
             selected: 2
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -222,6 +296,17 @@ class TabContainer extends Component {
         this.setState({
             ouVisible: true,
             selected: 2
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -230,6 +315,16 @@ class TabContainer extends Component {
         this.setState({
             azGroupVisible: true,
             selected: 2
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -238,6 +333,15 @@ class TabContainer extends Component {
         this.setState({
             azUserVisible: true,
             selected: 2
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -302,6 +406,14 @@ class TabContainer extends Component {
         this.setState({
             azKeyVaultVisible: true,
             selected: 2
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -326,6 +438,13 @@ class TabContainer extends Component {
         this.setState({
             azRoleVisible: true,
             selected: 2
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -334,6 +453,12 @@ class TabContainer extends Component {
         this.setState({
             azDeviceVisible: true,
             selected: 2
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -342,6 +467,11 @@ class TabContainer extends Component {
         this.setState({
             azSubscriptionVisible: true,
             selected: 2
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -350,6 +480,10 @@ class TabContainer extends Component {
         this.setState({
             azTenantVisible: true,
             selected: 2
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -358,6 +492,9 @@ class TabContainer extends Component {
         this.setState({
             azVMVisible: true,
             selected: 2
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -366,6 +503,8 @@ class TabContainer extends Component {
         this.setState({
             azServicePrincipalVisible: true,
             selected: 2
+            azAppVisible: false,
+            ntfsVisible: false,
         });
     }
 
@@ -374,6 +513,30 @@ class TabContainer extends Component {
         this.setState({
             azAppVisible: true,
             selected: 2
+            ntfsVisible: false,
+        });
+        this.setState({ selected: 2 });
+    }
+
+    _fileShareNodeClicked() {
+        this.setState({
+            userVisible: false,
+            computerVisible: false,
+            groupVisible: false,
+            domainVisible: false,
+            gpoVisible: false,
+            ouVisible: false,
+            azGroupVisible: false,
+            azUserVisible: false,
+            azKeyVaultVisible: false,
+            azResourceGroupVisible: false,
+            azDeviceVisible: false,
+            azSubscriptionVisible: false,
+            azTenantVisible: false,
+            azVMVisible: false,
+            azServicePrincipalVisible: false,
+            azAppVisible: false,
+            ntfsVisible: true,
         });
     }
 
@@ -425,6 +588,7 @@ class TabContainer extends Component {
                                 !this.state.baseVisible &&
                                 !this.state.azManagementGroupVisible &&
                                 !this.state.azRoleVisible
+                                !this.state.ntfsVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -468,6 +632,7 @@ class TabContainer extends Component {
                         <AZAppNodeData visible={this.state.azAppVisible} />
                         <AZManagementGroupNodeData visible={this.state.azManagementGroupVisible} />
                         <AZRoleNodeData visible={this.state.azRoleVisible} />
+                        <NtfsNodeData visible={this.state.ntfsVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>

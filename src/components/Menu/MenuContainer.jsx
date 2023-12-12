@@ -38,6 +38,29 @@ const IngestFuncMap = {
     gpos: NewIngestion.buildGpoJsonNew,
     containers: NewIngestion.buildContainerJsonNew,
     azure: NewIngestion.convertAzureData,
+    azdevices: NewIngestion.buildAzureDevices,
+    azusers: NewIngestion.buildAzureUsers,
+    azgroups: NewIngestion.buildAzureGroups,
+    aztenants: NewIngestion.buildAzureTenants,
+    azsubscriptions: NewIngestion.buildAzureSubscriptions,
+    azresourcegroups: NewIngestion.buildAzureResourceGroups,
+    azvms: NewIngestion.buildAzureVMs,
+    azkeyvaults: NewIngestion.buildAzureKeyVaults,
+    azgroupowners: NewIngestion.buildAzureGroupOwners,
+    azgroupmembers: NewIngestion.buildAzureGroupMembers,
+    azvmpermissions: NewIngestion.buildAzureVmPerms,
+    azrgpermissions: NewIngestion.buildAzureRGPermissions,
+    azkvpermissions: NewIngestion.buildAzureKVPermissions,
+    azkvaccesspolicies: NewIngestion.buildAzureKVAccessPolicies,
+    azpwresetrights: NewIngestion.buildAzurePWResetRights,
+    azgroupsrights: NewIngestion.buildAzureGroupRights,
+    azglobaladminrights: NewIngestion.buildAzureGlobalAdminRights,
+    azprivroleadminrights: NewIngestion.buildAzurePrivRileAdminRights,
+    azapplicationadmins: NewIngestion.buildAzureApplicationAdmins,
+    azcloudappadmins: NewIngestion.buildAzureCloudApplicationAdmins,
+    azapplicationowners: NewIngestion.buildAzureAppOwners,
+    azapplicationtosp: NewIngestion.buildAzureAppToSP,
+    fileshares: NewIngestion.buildFileShareJsonNew,
 };
 
 const MenuContainer = () => {
@@ -247,8 +270,18 @@ const MenuContainer = () => {
         setFileQueue((state) => {
             return { ...state, [file.id]: file };
         });
+
         console.log(`Processing ${file.name} with ${file.count} entries`);
         console.time('IngestTime');
+
+        console.debug("Processing " + file.path);
+        console.time('IngestTime');
+        let tag;
+        if (file.type.startsWith('az') || (file.type.startsWith('fileshares')) ) {
+            tag = 'data';
+        } else {
+            tag = file.type;
+        }
 
         const pipeline = chain([
             fs.createReadStream(file.path, { encoding: 'utf8' }),
@@ -260,6 +293,11 @@ const MenuContainer = () => {
         ]);
 
         let count = 0;
+
+
+        let chunk = [];
+        console.debug('Starting Processor via IngestFuncMap for filetype', file.type);
+
         let processor = IngestFuncMap[file.type];
         pipeline.on('data', async (data) => {
             try {
@@ -358,6 +396,7 @@ const MenuContainer = () => {
         let session = driver.session();
         await session.run(statement, { props: props }).catch((err) => {
             console.log(statement);
+            console.debug(props)
             console.log(err);
         });
         await session.close();

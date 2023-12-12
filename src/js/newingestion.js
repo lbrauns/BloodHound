@@ -1,3 +1,4 @@
+import { isFunction } from 'jquery';
 import { groupBy } from 'lodash/collection';
 
 const TRUST_DIRECTION_INBOUND = 'Inbound';
@@ -906,6 +907,117 @@ export function buildDomainJsonNew(chunk) {
     return queries;
 }
 
+export function buildFileShareJsonNew(chunk) {
+
+    let queries = {};
+    queries.properties = {};
+    queries.properties.statement = 'UNWIND $props AS prop MERGE (n:Base {objectid: prop.source}) SET n:Fileshare SET n += prop.map';
+    queries.properties.props = [];
+
+    for (let fileshare of chunk) {
+
+        //console.debug("Processing share " + fileshare.name + " with identifier " + fileshare.objectid );
+
+        //let properties = fileshare.Properties;
+        let identifier = fileshare.objectid.toUpperCase();
+        let properties = {
+            name: fileshare.name.toUpperCase(),
+            domain: fileshare.domain.toUpperCase(),
+            cifspath: fileshare.cifspath,
+            cifshost: fileshare.cifshost,
+            cifshostsid: fileshare.cifshostsid,
+            highvalue: fileshare.highvalue,
+            description: fileshare.description
+        };
+
+        queries.properties.props.push({
+            source: identifier,
+            map: properties
+        });
+
+        let fullcontrol = fileshare.fullcontrol || [];
+        let readcontrol = fileshare.read  || [];
+        let acecontrol = fileshare.changepermissions || [];
+        let owner = fileshare.owner || null;
+        
+        let format = ['','Fileshare','','{isacl: false}'];
+        format[0] = 'Computer';
+        format[2] = 'NtfsPublish';
+        let props = {source: properties.cifshostsid, target: identifier};
+        insertNew(queries, format, props);
+
+        if( owner != null){
+            if( owner.PrincipalType.toUpperCase() === 'USER' || owner.PrincipalType.toUpperCase() === 'GROUP' || owner.PrincipalType.toUpperCase() === 'COMPUTER' ){
+                format[0] = owner.PrincipalType;
+                format[2] = 'NtfsOwner';
+                props = {source: owner.PrincipalSid, target: identifier};
+                insertNew(queries, format, props);
+            }
+            else{
+                console.debug( format[2]+ " - PrincipalType " + owner.PrincipalType + " is not implemented yet for fileshares.")
+                //console.debug(owner)
+            }
+        }
+        
+        if( fullcontrol.length > 0){
+            format[2] = 'NtfsFullControl';
+            let grouped = groupBy(fullcontrol || [], 'PrincipalType');
+            for ( let group in grouped ){
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
+                    format[0] = group;
+                    props = grouped[group].map((group) => {
+                        return { source: group.PrincipalSid, target: identifier };
+                    });
+                    insertNew(queries, format, props);
+                }
+                else{
+                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
+                    //console.debug(group)
+                }
+            }
+        }
+
+        if( readcontrol.length > 0){
+            format[2] = 'NtfsRead';
+            let grouped = groupBy(readcontrol || [], 'PrincipalType');
+            for ( let group in grouped ){
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
+                    format[0] = group;
+                    props = grouped[group].map((group) => {
+                        return { source: group.PrincipalSid, target: identifier };
+                    });
+                    insertNew(queries, format, props);
+                }
+                else{
+                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
+                    //console.debug(readcontrol)
+                }
+            }
+        }
+
+        if( acecontrol.length > 0){
+            format[2] = 'NtfsAceControl';
+            let grouped = groupBy(acecontrol || [], 'PrincipalType');
+            for ( let group in grouped ){
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
+                    format[0] = group;
+                    props = grouped[group].map((group) => {
+                        return { source: group.PrincipalSid, target: identifier };
+                    });
+                    insertNew(queries, format, props);
+                }
+                else{
+                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
+                    //console.debug(group)
+                }
+            }
+        }
+    }
+
+    return queries;
+
+}
+
 const baseInsertStatement =
     'UNWIND $props AS prop MERGE (n:Base {objectid: prop.source}) SET n:{0} MERGE (m:Base {objectid: prop.target}) SET m:{1} MERGE (n)-[r:{2} {3}]->(m)';
 
@@ -920,6 +1032,7 @@ const azureInsertStatement =
  * @param {*} queryProps - array of query props
  */
 function insertNew(queries, formatProps, queryProps) {
+
     if (formatProps.length < 4) {
         throw new NotEnoughArgumentsException();
     }

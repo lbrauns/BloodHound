@@ -252,6 +252,23 @@ const DatabaseDataDisplay = () => {
             <hr></hr>
 
             <div className={clsx('text-center', styles.buttongroup)}>
+
+            <CollapsibleSection header='NTFS OBJECTS'>
+                <Table hover striped responsive>
+                    <thead></thead>
+                    <tbody>
+                        <DatabaseDataLabel
+                                        query={'MATCH (n:Fileshare) RETURN count(n) AS count'}
+                                        index={index}
+                                        label={'Fileshares'}
+                                    />
+                    </tbody>
+                </Table>
+            </CollapsibleSection>
+            
+            <hr></hr>
+
+            <div className={clsx('text-center', styles.buttongroup)} width="90%">
                 <div role='group' className={styles.buttongroup}>
                     <button
                         type='button'

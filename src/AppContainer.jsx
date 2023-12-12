@@ -84,6 +84,11 @@ const fullEdgeList = [
     'DumpSMSAPassword',
     'DCSync',
     'SyncLAPSPassword'
+    'NtfsPublish',
+    'NtfsOwner',
+    'NtfsFullControl',
+    'NtfsRead',
+    'NtfsAceControl',
 ];
 
 export default class AppContainer extends Component {
