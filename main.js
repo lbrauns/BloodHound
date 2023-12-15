@@ -21,6 +21,7 @@ function createWindow() {
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
         });
     } else if (platform === 'linux') {
@@ -31,6 +32,7 @@ function createWindow() {
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
         });
     } else {
@@ -41,6 +43,7 @@ function createWindow() {
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
         });
     }
