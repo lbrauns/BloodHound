@@ -46,7 +46,7 @@ const DatabaseDataDisplay = () => {
                 context.darkMode ? styles.dark : styles.light
             )}
         >
-            <CollapsibleSection header='DB STATS'>
+            <CollapsibleSection header='DB STATS TEST'>
                 <Table hover striped responsive>
                     <thead></thead>
                     <tbody>
@@ -245,6 +245,20 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'AZWebApp'}
                         />
+                    </tbody>
+                </Table>
+            </CollapsibleSection>
+            <hr></hr>
+
+            <CollapsibleSection header='FILESHARE OBJECTS'>
+                <Table hover striped responsive>
+                    <thead></thead>
+                    <tbody>
+                        <DatabaseDataLabel
+                                        query={'MATCH (n:Fileshare) RETURN count(n) AS count'}
+                                        index={index}
+                                        label={'Fileshares'}
+                                    />
                     </tbody>
                 </Table>
             </CollapsibleSection>

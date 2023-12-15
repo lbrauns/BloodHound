@@ -199,6 +199,24 @@ const EdgeFilter = ({ open }) => {
                     <EdgeFilterCheck name='AZMGGrantAppRoles' />
                     <EdgeFilterCheck name='AZMGGrantRole' />
                 </div>
+                <div>
+                    <EdgeFilterSection
+                        title='Ntfs Edges'
+                        edges={[
+                            'NtfsPublish',
+                            'NtfsOwner',
+                            'NtfsFullControl',
+                            'NtfsRead',
+                            'NtfsAceControl',
+                        ]}
+                        sectionName='ntfs'
+                    />
+                    <EdgeFilterCheck name='NtfsFullControl' />
+                    <EdgeFilterCheck name='NtfsRead' />
+                    <EdgeFilterCheck name='NtfsOwner' />
+                    <EdgeFilterCheck name='NtfsAceControl' />
+                    <EdgeFilterCheck name='NtfsPublish' />
+                </div>
             </div>
         </motion.div>
     );

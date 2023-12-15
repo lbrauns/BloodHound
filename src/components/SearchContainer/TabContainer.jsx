@@ -25,6 +25,7 @@ import AZTenantNodeData from './Tabs/AZTenantNodeData';
 import AZVMNodeData from './Tabs/AZVMNodeData';
 import AZServicePrincipalNodeData from './Tabs/AZServicePrincipal';
 import AZAppNodeData from './Tabs/AZApp';
+import NtfsNodeData from './Tabs/NtfsNodeData';
 import { Tabs, Tab } from 'react-bootstrap';
 import { openSync, readSync, closeSync } from 'fs';
 import imageType from 'image-type';
@@ -67,6 +68,7 @@ class TabContainer extends Component {
             azAppVisible: false,
             azManagementGroupVisible: false,
             azRoleVisible: false,
+            ntfsVisible: false,
             selected: 1,
         };
     }
@@ -136,6 +138,9 @@ class TabContainer extends Component {
             this._azManagementGroupNodeClicked()
         } else if (type === 'AZRole') {
             this._azRoleNodeClicked()
+        }
+        else if ( type == 'Fileshare' ){
+            this._fileShareNodeClicked();
         }
     }
 
@@ -377,6 +382,13 @@ class TabContainer extends Component {
         });
     }
 
+    _fileShareNodeClicked() {
+        this.setState({
+            ntfsVisible: true,
+            selected: 2
+        });
+    }
+
     _handleSelect(index, last) {
         this.setState({ selected: index });
     }
@@ -424,7 +436,8 @@ class TabContainer extends Component {
                                 !this.state.azAppVisible &&
                                 !this.state.baseVisible &&
                                 !this.state.azManagementGroupVisible &&
-                                !this.state.azRoleVisible
+                                !this.state.azRoleVisible &&
+                                !this.state.ntfsVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -468,6 +481,8 @@ class TabContainer extends Component {
                         <AZAppNodeData visible={this.state.azAppVisible} />
                         <AZManagementGroupNodeData visible={this.state.azManagementGroupVisible} />
                         <AZRoleNodeData visible={this.state.azRoleVisible} />
+                        
+                        <NtfsNodeData visible={this.state.ntfsVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>

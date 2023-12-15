@@ -83,7 +83,12 @@ const fullEdgeList = [
     'AddKeyCredentialLink',
     'DumpSMSAPassword',
     'DCSync',
-    'SyncLAPSPassword'
+    'SyncLAPSPassword',
+    'NtfsPublish',
+    'NtfsOwner',
+    'NtfsFullControl',
+    'NtfsRead',
+    'NtfsAceControl'
 ];
 
 export default class AppContainer extends Component {

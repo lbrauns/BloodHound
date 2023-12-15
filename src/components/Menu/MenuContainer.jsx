@@ -38,6 +38,7 @@ const IngestFuncMap = {
     gpos: NewIngestion.buildGpoJsonNew,
     containers: NewIngestion.buildContainerJsonNew,
     azure: NewIngestion.convertAzureData,
+    fileshares: NewIngestion.buildFileShareJsonNew
 };
 
 const MenuContainer = () => {
@@ -207,9 +208,11 @@ const MenuContainer = () => {
     const checkFileValidity = async (files) => {
         let filteredFiles = {};
         for (let file of files) {
+            console.debug('Checking file validity');
             let meta = await getMetaTagQuick(file);
 
             if (!('version' in meta) || meta.version < 4) {
+                console.debug('File does not meet meta criteria');
                 filteredFiles[file.id] = {
                     ...file,
                     status: FileStatus.InvalidVersion,
@@ -218,7 +221,7 @@ const MenuContainer = () => {
             }
 
             if (!Object.keys(IngestFuncMap).includes(meta.type)) {
-                console.log(meta.type);
+                console.debug('Metatype not in IngestFuncMap: ', meta.type);
                 filteredFiles[file.id] = {
                     ...file,
                     status: FileStatus.BadType,
@@ -260,6 +263,7 @@ const MenuContainer = () => {
         ]);
 
         let count = 0;
+        console.debug('Starting Processor via IngestFuncMap for filetype', file.type);
         let processor = IngestFuncMap[file.type];
         pipeline.on('data', async (data) => {
             try {
@@ -307,7 +311,8 @@ const MenuContainer = () => {
                             await uploadData(statement, chunk);
                         }
                     }
-                } else {
+                } 
+                else {
                     for (let key in processedData) {
                         let props = processedData[key].props;
                         if (props.length === 0) continue;
@@ -319,6 +324,7 @@ const MenuContainer = () => {
                         }
                     }
                 }
+                
 
                 file.progress = count;
                 setFileQueue((state) => {
@@ -358,6 +364,7 @@ const MenuContainer = () => {
         let session = driver.session();
         await session.run(statement, { props: props }).catch((err) => {
             console.log(statement);
+            console.debug(props);
             console.log(err);
         });
         await session.close();
