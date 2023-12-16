@@ -6,7 +6,7 @@ import neo4j from 'neo4j-driver';
 import semver from 'semver'
 
 const Login = () => {
-    const [url, setUrl] = useState('bolt://localhost:7687');
+    const [url, setUrl] = useState('bolt://127.0.0.1:7687');
     const [loginEnabled, setLoginEnabled] = useState(false);
     const [loginRunning, setLoginRunning] = useState(false);
     const [user, setUser] = useState('');
