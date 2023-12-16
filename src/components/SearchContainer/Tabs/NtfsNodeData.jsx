@@ -7,6 +7,7 @@ import ExtraNodeProps from './Components/ExtraNodeProps';
 import MappedNodeProps from './Components/MappedNodeProps';
 import NodeCypherLink from './Components/NodeCypherLink';
 import NodeCypherNoNumberLink from './Components/NodeCypherNoNumberLink';
+import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import styles from './NodeData.module.css';
 
 const NtfsNodeData = () => {
