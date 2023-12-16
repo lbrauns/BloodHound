@@ -271,6 +271,12 @@ global.appStore = {
                 scale: 1.25,
                 color: '#c1d6d6',
             },
+            Fileshare: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf07c',
+                scale: 1.25,
+                color: '#00BEBC',
+            },
             Base: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uF128',
@@ -311,6 +317,8 @@ global.appStore = {
             AddKeyCredentialLink: 'tapered',
             SyncLAPSPassword: 'tapered',
             DumpSMSAPassword: 'tapered',
+            NtfsFullControl: 'tapered',
+            NtfsRead: 'tapered'
         },
     },
     lowResPalette: {
