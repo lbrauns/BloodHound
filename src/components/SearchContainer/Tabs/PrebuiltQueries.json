@@ -541,6 +541,7 @@
         },
         {
             "name": "Find all Fileshares",
+            "category": "Fileshares",
             "queryList": [
                 {
                     "final": true,
