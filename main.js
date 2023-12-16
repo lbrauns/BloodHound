@@ -1,15 +1,25 @@
 const electron = require('electron');
 const platform = require('os').platform();
+
+// Initialize Electron Remote
+const electronRemote = process.type === 'browser' ? electron : 
+require('@electron/remote')
+
 // Module to control application life.
-const app = electron.app;
-const Menu = electron.Menu;
+const { app, Menu } = require('electron')
 
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const BrowserWindow = electronRemote.BrowserWindow
+const { initialize, enable } = require('@electron/remote/main')
+initialize();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+//Initialize ConfigStore in main process
+const ConfigStore = require('electron-store');
+ConfigStore.initRenderer();
 
 function createWindow() {
     // Create the browser window.
@@ -131,6 +141,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
     createWindow();
+    enable(mainWindow.webContents)
     mainWindow.maximize();
 });
 
@@ -148,6 +159,7 @@ app.on('activate', function () {
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
         createWindow();
+        enable(mainWindow.webContents)
     }
 });
 

@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { remote } from 'electron';
+
+const remote = require('@electron/remote/main');
+
+const { dialog } = window.require('@electron/remote');
+const { app } = window.require('@electron/remote');
+
+
 import { useAlert } from 'react-alert';
 import MenuButton from './MenuButton';
 import { isZipSync } from 'is-zip-file';
@@ -14,8 +20,6 @@ import * as NewIngestion from '../../js/newingestion';
 import { AzureLabels } from '../../js/newingestion';
 import UploadStatusContainer from '../Float/UploadStatusContainer';
 import { streamArray } from 'stream-json/streamers/StreamArray';
-
-const { dialog, app } = remote;
 
 const { batch } = require('stream-json/utils/Batch');
 

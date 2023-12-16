@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { remote } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import PrebuiltQueryNode from './PrebuiltQueryNode';
@@ -8,7 +7,8 @@ import { AppContext } from '../../../AppContext';
 import { Table } from 'react-bootstrap';
 import CollapsibleSection from './Components/CollapsibleSection';
 
-const { app } = remote;
+const remote = require('@electron/remote/main');
+const { app } = window.require('@electron/remote')
 
 const PrebuiltQueriesDisplay = () => {
     const [queries, setQueries] = useState([]);

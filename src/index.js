@@ -8,7 +8,8 @@ import Login from './components/Float/Login';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 
-import { remote, shell } from 'electron';
+import { shell } from 'electron';
+
 import { join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
@@ -17,7 +18,9 @@ import ConfigStore from 'electron-store';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { EventEmitter2 as e } from 'eventemitter2';
 
-const { app } = remote;
+const remote = require('@electron/remote/main');
+const { app } = window.require('@electron/remote');
+
 
 global.conf = new ConfigStore();
 global.imageconf = new ConfigStore({

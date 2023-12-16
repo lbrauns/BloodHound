@@ -7,11 +7,13 @@ import {AppContext} from '../../AppContext';
 import PoseContainer from '../PoseContainer';
 import {useDragControls} from 'framer-motion';
 
-import {remote} from 'electron';
+import { remote } from '@electron/remote/main';
+
+const { app } = window.require('@electron/remote');
+
 import path from 'path';
 import fs from 'fs';
 
-const { app } = remote;
 
 const QueryCustomCreate = () => {
     const [nodeCollapse, setNodeCollapse] = useState(appStore.performance.edge);

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-const { app, shell } = require('electron').remote;
+
+const { app, shell } = require('@electron/remote');
+
 import { join } from 'path';
 import { promises } from 'fs';
 import { Modal, Button } from 'react-bootstrap';

@@ -3,7 +3,6 @@ import { findGraphPath, generateUniqueId, setSchema } from 'utils';
 import { readFile, writeFile } from 'fs';
 import { fork } from 'child_process';
 import { join } from 'path';
-import { remote } from 'electron';
 import { v4 as uuidv4 } from 'uuid';
 import { withAlert } from 'react-alert';
 import NodeTooltip from './Tooltips/NodeTooltip';
@@ -11,6 +10,8 @@ import StageTooltip from './Tooltips/StageTooltip';
 import EdgeTooltip from './Tooltips/EdgeTooltip';
 import ConfirmDrawModal from './Modals/ConfirmDrawModal';
 import { escapeRegExp } from '../js/utils';
+
+const remote = require('@electron/remote/main');
 
 let child;
 const { dialog } = remote;

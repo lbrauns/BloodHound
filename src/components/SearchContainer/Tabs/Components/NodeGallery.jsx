@@ -7,11 +7,12 @@ import md5File from 'md5-file';
 import { readFileSync, writeFileSync } from 'fs';
 import { useAlert } from 'react-alert';
 import { join } from 'path';
-import { remote } from 'electron';
-const { app } = remote;
 import styles from './NoteGallery.module.css';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+
+const remote = require('@electron/remote/main');
+const { app } = window.require('@electron/remote');
 
 const NodeGallery = ({ objectid, type, visible }) => {
     const [pics, setPics] = useState(null);

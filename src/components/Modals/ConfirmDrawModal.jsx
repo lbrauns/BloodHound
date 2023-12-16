@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import {writeFile} from 'fs';
-import {remote} from 'electron';
-import BaseModal from './BaseModal';
 
+const remote = require('@electron/remote/main');
 const { dialog } = remote;
+
+
+import BaseModal from './BaseModal';
 
 const ConfirmDrawModal = ({ promise }) => {
     const [data, setData] = useState(null);
