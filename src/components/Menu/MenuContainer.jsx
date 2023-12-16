@@ -390,7 +390,7 @@ const MenuContainer = () => {
 
         if (
             postProcessStep ===
-            ADPostProcessSteps.length + AzurePostProcessSteps.length
+            ADPostProcessSteps.length + AzurePostProcessSteps.length + FileSharePostProcessSteps.length
         ) {
             setPostProcessVisible(false);
             setPostProcessStep(0);
@@ -433,6 +433,7 @@ const MenuContainer = () => {
                     console.time('PostProcess');
                     await postProcessAD().catch(console.error);
                     await postProcessAzure().catch(console.error);
+                    await postProcessFileshares().catch(console.error);
                     console.timeEnd('PostProcess');
                     console.log('Post-processing complete');
                     setPostProcessRunning(false);
@@ -1237,6 +1238,21 @@ const MenuContainer = () => {
         },
     ];
 
+    const FileSharePostProcessSteps = [
+        {
+            step: 'Remove UNKNOWN basetype from nodes with other labels aside from Base',
+            description: 'Remove UNKNOWN basetype from nodes with other labels aside from Base',
+            type: 'query',
+            statement: `CALL db.labels() YIELD label
+                WHERE label <> "UNKNOWN"
+                WITH label
+                MATCH (n) WHERE label in LABELS(n) AND "UNKNOWN" IN LABELS(n)
+                REMOVE n:UNKNOWN`,
+            params: null,
+        }
+    ]
+
+
     const executePostProcessSteps = async (steps, session) => {
         for (let step of steps) {
             if (step.type === 'query') {
@@ -1276,6 +1292,15 @@ const MenuContainer = () => {
         let session = driver.session();
 
         await executePostProcessSteps(AzurePostProcessSteps, session);
+
+        await session.close();
+    };
+
+    const postProcessFileshares = async () => {
+        console.log('Running fileshare post-processing queries');
+        let session = driver.session();
+
+        await executePostProcessSteps(FileSharePostProcessSteps, session);
 
         await session.close();
     };
@@ -1415,6 +1440,7 @@ const MenuContainer = () => {
                 postProcessVisible={postProcessVisible}
                 adPostProcessCount={ADPostProcessSteps.length}
                 azPostProcessCount={AzurePostProcessSteps.length}
+                ntfsPostProcessCount={FileSharePostProcessSteps.length}
             />
         </div>
     );

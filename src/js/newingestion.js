@@ -920,10 +920,8 @@ export function buildFileShareJsonNew(chunk) {
 
     for (let fileshare of chunk) {
 
-        //console.debug("Processing share " + fileshare.name + " with identifier " + fileshare.objectid );
-
-        //let properties = fileshare.Properties;
         let identifier = fileshare.objectid.toUpperCase();
+
         let properties = {
             name: fileshare.name.toUpperCase(),
             domain: fileshare.domain.toUpperCase(),
@@ -944,6 +942,9 @@ export function buildFileShareJsonNew(chunk) {
         let acecontrol = fileshare.changepermissions || [];
         let owner = fileshare.owner || null;
 
+        console.log(`Ingesting share ${properties.name}`);
+
+        // Computer that hosts the directory
         let format = ['','Fileshare','','{isacl: false}'];
         format[0] = 'Computer';
         format[2] = 'NtfsPublish';
@@ -951,15 +952,38 @@ export function buildFileShareJsonNew(chunk) {
         insertNew(queries, format, props);
 
         if( owner != null){
-            if( owner.PrincipalType.toUpperCase() === 'USER' || owner.PrincipalType.toUpperCase() === 'GROUP' || owner.PrincipalType.toUpperCase() === 'COMPUTER' ){
-                format[0] = owner.PrincipalType;
-                format[2] = 'NtfsOwner';
-                props = {source: owner.PrincipalSid, target: identifier};
-                insertNew(queries, format, props);
+            var setowner = true
+            if( owner.PrincipalType.toUpperCase() === 'USER' || owner.PrincipalType.toUpperCase() === 'GROUP' || owner.PrincipalType.toUpperCase() === 'COMPUTER' || owner.PrincipalType.toUpperCase() === 'UNKNOWN' ){
+                
+                if( owner.PrincipalSid.toUpperCase() === `${properties.domain}-S-1-5-18` ){ // Owner is well-known SID system
+                    // Computer that publishes a directory always has FullControl
+                    console.log("Owner is SYSTEM, setting owner to: ", owner.PrincipalSid);
+                    format[0] = 'Computer';
+                    format[2] = 'NtfsFullControl';
+                    props = {source: properties.cifshostsid, target: identifier};
+                }
+                else if( owner.PrincipalSid.toUpperCase() === `${properties.domain}-S-1-3-0` ){   // Well-known SID CREATOR OWNER
+                    //Dont set CREATOR OWNER, this is the edge NfsOwns
+                    //Should never hit as PrincipalType is BUILTIN
+                    console.log("Will not set owner to: ", owner.PrincipalSid);
+                    setowner = false
+                }
+                else{
+                    format[0] = owner.PrincipalType;
+                    format[2] = 'NtfsOwner';
+                    props = {source: owner.PrincipalSid, target: identifier};
+                }
+
+                if(setowner === true ){
+                    insertNew(queries, format, props);
+                }
+                else{
+                    console.log("setowner is false, skipping.");
+                }
+                
             }
             else{
-                console.debug( format[2]+ " - PrincipalType " + owner.PrincipalType + " is not implemented yet for fileshares.")
-                //console.debug(owner)
+                console.log( format[2]+ " - PrincipalType " + owner.PrincipalType + " is not implemented yet for fileshares.");
             }
         }
 
@@ -967,16 +991,29 @@ export function buildFileShareJsonNew(chunk) {
             format[2] = 'NtfsFullControl';
             let grouped = groupBy(fullcontrol || [], 'PrincipalType');
             for ( let group in grouped ){
-                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
-                    format[0] = group;
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' || group.toUpperCase() === 'UNKNOWN' ){
+                    
+                    var nodeType = group;
+
                     props = grouped[group].map((group) => {
-                        return { source: group.PrincipalSid, target: identifier };
+
+                        if(group.PrincipalSid.toUpperCase() === `${properties.domain}-S-1-5-18`){
+                            format[0] = 'Computer';
+                            format[2] = 'NtfsFullControl';
+                            return {source: properties.cifshostsid, target: identifier};
+                        }
+                        else{
+                            format[0] = nodeType;
+                            return { source: group.PrincipalSid, target: identifier };
+                        }
+                        
                     });
+                    
                     insertNew(queries, format, props);
+
                 }
                 else{
-                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
-                    //console.debug(group)
+                    console.log(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
                 }
             }
         }
@@ -985,7 +1022,7 @@ export function buildFileShareJsonNew(chunk) {
             format[2] = 'NtfsRead';
             let grouped = groupBy(readcontrol || [], 'PrincipalType');
             for ( let group in grouped ){
-                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' || group.toUpperCase() === 'UNKNOWN' ){
                     format[0] = group;
                     props = grouped[group].map((group) => {
                         return { source: group.PrincipalSid, target: identifier };
@@ -993,8 +1030,7 @@ export function buildFileShareJsonNew(chunk) {
                     insertNew(queries, format, props);
                 }
                 else{
-                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
-                    //console.debug(readcontrol)
+                    console.log(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
                 }
             }
         }
@@ -1003,7 +1039,7 @@ export function buildFileShareJsonNew(chunk) {
             format[2] = 'NtfsAceControl';
             let grouped = groupBy(acecontrol || [], 'PrincipalType');
             for ( let group in grouped ){
-                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' ){
+                if( group.toUpperCase() === 'USER' || group.toUpperCase() === 'GROUP' || group.toUpperCase() === 'COMPUTER' || group.toUpperCase() === 'UNKNOWN' ){
                     format[0] = group;
                     props = grouped[group].map((group) => {
                         return { source: group.PrincipalSid, target: identifier };
@@ -1011,8 +1047,7 @@ export function buildFileShareJsonNew(chunk) {
                     insertNew(queries, format, props);
                 }
                 else{
-                    console.debug(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
-                    //console.debug(group)
+                    console.log(format[2]+ " - PrincipalType " + group + " is not implemented yet for fileshares.")
                 }
             }
         }

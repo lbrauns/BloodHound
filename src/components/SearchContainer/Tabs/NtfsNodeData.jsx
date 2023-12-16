@@ -85,35 +85,55 @@ const NtfsNodeData = () => {
                                     start={label}
                                 />
                                 <NodeCypherLinkComplex
-                                    property='User with NtfsRead to this share'
+                                    property='Objects with NtfsRead to this share'
                                     target={objectid}
                                     countQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsRead|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN COUNT(DISTINCT(u))'
+                                        'MATCH p=shortestPath((x)-[:NtfsRead|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN COUNT(DISTINCT(x))'
                                     }
                                     graphQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsRead|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN p'
+                                        'MATCH p=shortestPath((x)-[:NtfsRead|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN p'
                                     }
                                 />
 
                                 <NodeCypherLinkComplex
-                                    property='User with NtfsFullControl to this share'
+                                    property='Objects with NtfsFullControl to this share'
                                     target={objectid}
                                     countQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsFullControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN COUNT(DISTINCT(u))'
+                                        'MATCH p=shortestPath((x)-[:NtfsFullControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN COUNT(DISTINCT(x))'
                                     }
                                     graphQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsFullControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN p'
+                                        'MATCH p=shortestPath((x)-[:NtfsFullControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN p'
                                     }
                                 />
 
                                 <NodeCypherLinkComplex
-                                    property='User with AceControl to this share'
+                                    property='Objects with AceControl to this share'
                                     target={objectid}
                                     countQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN COUNT(DISTINCT(u))'
+                                        'MATCH p=shortestPath((x)-[:NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN COUNT(DISTINCT(x))'
                                     }
                                     graphQuery={
-                                        'MATCH p=shortestPath((u:User)-[:NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT u=m RETURN p'
+                                        'MATCH p=shortestPath((x)-[:NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN p'
+                                    }
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Transitive access over this share'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH p=shortestPath((x)-[:HasSession|AdminTo|NtfsRead|NtfsFullControl|NtfsOwner|NtfsPublish|NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN COUNT(DISTINCT(x))'
+                                    }
+                                    graphQuery={
+                                        'MATCH p=shortestPath((x)-[:HasSession|AdminTo|NtfsRead|NtfsFullControl|NtfsOwner|NtfsPublish|NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN p'
+                                    }
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Transitive control over this share'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH p=shortestPath((x)-[:HasSession|AdminTo|NtfsFullControl|NtfsOwner|NtfsPublish|NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN COUNT(DISTINCT(x))'
+                                    }
+                                    graphQuery={
+                                        'MATCH p=shortestPath((x)-[:HasSession|AdminTo|NtfsFullControl|NtfsOwner|NtfsPublish|NtfsAceControl|MemberOf*1..]->(m:Fileshare {objectid: $objectid})) WHERE NOT x=m RETURN p'
                                     }
                                 />
                             </tbody>

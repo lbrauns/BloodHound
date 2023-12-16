@@ -103,6 +103,9 @@ const SearchRow = ({ item, search }) => {
         case 'AZRole':
             icon.className = 'fa fa-window-restore'
             break
+        case 'Fileshare':
+            icon.className = 'fa fa-folder-open'
+            break
         default:
             icon.className = 'fa fa-question';
             type = 'Base';

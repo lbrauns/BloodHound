@@ -283,6 +283,18 @@ global.appStore = {
                 scale: 1.25,
                 color: '#E6E600',
             },
+            UNKNOWN: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf128',
+                scale: 1.25,
+                color: '#00FEFF',
+            },
+            Unknown: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf128',
+                scale: 1.25,
+                color: '#00FEFF',
+            }
         },
         edgeScheme: {
             AdminTo: 'tapered',
@@ -318,7 +330,9 @@ global.appStore = {
             SyncLAPSPassword: 'tapered',
             DumpSMSAPassword: 'tapered',
             NtfsFullControl: 'tapered',
-            NtfsRead: 'tapered'
+            NtfsRead: 'tapered',
+            NtfsPublish: 'tapered',
+            NtfsOwner: 'tapered'
         },
     },
     lowResPalette: {
