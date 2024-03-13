@@ -88,7 +88,7 @@ const AZGroupNodeData = () => {
                                 />
                                 <NodeCypherLink
                                     baseQuery={
-                                        'MATCH p=(:AZGroup {objectid: $objectid})-[:AZMemberOf|AZHasRole*1..]->(n:AZRole)'
+                                        'MATCH p=(:AZGroup {objectid: $objectid})-[:AZMemberOf|AZHasRole|AzIsEligible*1..]->(n:AZRole)'
                                     }
                                     property={'Azure AD Admin Roles'}
                                     target={objectid}

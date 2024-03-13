@@ -76,7 +76,7 @@ const AZDeviceNodeData = () => {
                             <tbody className='searchable'>
                                 <NodeCypherLink
                                     baseQuery={
-                                        'MATCH p=(:AZDevice {objectid: $objectid})-[:AZMemberOf|AZHasRole*1..]->(n:AZRole)'
+                                        'MATCH p=(:AZDevice {objectid: $objectid})-[:AZMemberOf|AZHasRole|AzIsEligible*1..]->(n:AZRole)'
                                     }
                                     property={'Azure AD Admin Roles'}
                                     target={objectid}
